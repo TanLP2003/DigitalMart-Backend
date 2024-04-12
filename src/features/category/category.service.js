@@ -1,4 +1,4 @@
-const { badRequest } = require('../../helpers/createError');
+const { BadRequest } = require('../../utils/createError');
 const categoryRepo = require('./category.repo');
 
 module.exports = {
@@ -10,6 +10,9 @@ module.exports = {
     },
     deleteCategory: async (name) => {
         let result = await categoryRepo.deleteCategory(name);
-        if(!result) throw badRequest("Bad Request");
+        if(!result) throw BadRequest("Bad Request");
+    },
+    renameCategory: async (id, newName) => {
+        return await categoryRepo.renameCategory(id, newName);
     }
 }

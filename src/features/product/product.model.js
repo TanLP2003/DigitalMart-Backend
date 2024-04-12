@@ -20,12 +20,21 @@ const productSchema = new Schema({
     category: {
         type: Schema.Types.ObjectId,
         ref: 'categories',
-        required: true
+        required: true,
+        index: true
     },
     metadata: {
         type: Map,   
         of: String
     }
+})
+
+productSchema.pre('save', function(next) {
+    if(this.isNew) {
+        console.log("product is new");
+        this.category = new mongoose.Types.ObjectId(this.category);
+    }
+    next();
 })
 
 module.exports = Product = mongoose.model("products", productSchema);

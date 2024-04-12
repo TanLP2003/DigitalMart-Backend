@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
+const { hashPassword } = require('../../utils/auth');
 const {Schema} = mongoose;
 
 const userSchema = new Schema({
     username: {
         type: String,
-        require: true
+        required: true
     },
-    hashPassword: {
+    password: {
         type: String,
-        require: true
+        required: true
     },
     avatar: {
         type: String,
@@ -37,20 +38,27 @@ const userSchema = new Schema({
         type: String,
         enum: {
             values: ["MALE", "FEMALE", "CUSTOM"],
-            message: `${VALUE} is not supported!`
+            message: props => `${props.value} is not supported!`
         },
-        require: true
+        required: true
     },
     role: {
         type: String,
         enum: {
             values: ["CUSTOMER", "ADMIN"],
-            message: `${VALUE} is not supported`
+            message: props => `${props.value} is not supported`
         },
         default: "CUSTOMER",
-        require: true
+        required: true
     }
 })
 
-const User = mongoose.Model('User', userSchema);
-module.exports = User;
+userSchema.pre('save', async function (next) {
+    console.log("userModel", this);
+    if(this.isModified('password')){
+        this.password = await hashPassword(this.password);
+    }
+    next();
+})
+
+module.exports = User = mongoose.model('users', userSchema);

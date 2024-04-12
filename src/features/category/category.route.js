@@ -1,7 +1,8 @@
 const {
     getAll,
     addCategory,
-    deleteCategory
+    deleteCategory,
+    renameCategory
 } = require('./category.controllers');
 
 const categoryRouter = require('express').Router();
@@ -9,5 +10,5 @@ const categoryRouter = require('express').Router();
 categoryRouter.get('/', getAll);
 categoryRouter.post('/', addCategory);
 categoryRouter.delete('/:name', deleteCategory);
-
+categoryRouter.put('/:id', renameCategory)
 module.exports = categoryRouter;

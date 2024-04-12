@@ -1,4 +1,4 @@
-const productService = require('./product.services');
+const productService = require('./product.service');
 
 module.exports = {
     getById: async (req, res, next) => {
@@ -23,5 +23,18 @@ module.exports = {
         catch (err) {
             next(err)
         }
+    },
+    updateProduct: async (req, res, next) => {
+        const {id} = req.params;
+        try {
+            const updatedProduct = await productService.updateProduct(id, req.body);
+            res.status(200).json(updatedProduct);
+        }
+        catch(err) {
+            next(err);
+        }
+    },
+    getByCategory: async (req, res, next) => {
+        res.status(200).json(await productService.getByCategory(req.params.category))
     }
 }

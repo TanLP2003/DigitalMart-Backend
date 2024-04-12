@@ -1,8 +1,6 @@
 const Product = require('./product.model');
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
+
 const createProduct = async (product) => {
-    product.category = new ObjectId(product.category);
     const newProduct = await Product.create(product);
     return newProduct;
 }
@@ -12,8 +10,10 @@ const getProductById = async (id) => {
     return product;
 }
 
-const updateProduct = async () => {
-
+const updateProduct = async (id, update) => {
+    await Product.findByIdAndUpdate(id, update);
+    const updatedProduct = Product.findById(id);
+    return updatedProduct;
 }
 
 const deleteProduct = async (id) => {
@@ -22,8 +22,11 @@ const deleteProduct = async (id) => {
 }
 
 const getByCategory = async (category) => {
-    
+    const products = await Product.find({category: category});
+    return products;
 }
+
+
 
 module.exports = productRepo = {
     getProductById, 

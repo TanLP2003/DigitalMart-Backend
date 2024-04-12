@@ -4,9 +4,6 @@ module.exports = {
     getAllCategory: async () => {
         return await Category.find({});
     },
-    getByName: async (name) => {
-        return await Category.findOne({name: name});
-    },
     getById: async (id) => {
         return await Category.findById(id);
     },
@@ -17,5 +14,8 @@ module.exports = {
     deleteCategory: async (name) => {
         const deletedCategory = await Category.findOneAndDelete({name: name});
         return !deletedCategory ? false: true; 
+    },
+    renameCategory: async (id, newName) => {
+        return await Category.findByIdAndUpdate(id, {name: newName}, {new: true});
     }
 }
