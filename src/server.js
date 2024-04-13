@@ -1,14 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const helmet = require('helmet');
 const xss = require('xss-clean');
-const config = require('./configs/config');
 const globalExceptionHandler = require('./middlewares/globalExceptionHandler');
 const productRouter = require('./features/product/product.route');
 const categoryRouter = require('./features/category/category.route');
 const userRouter = require('./features/user/user.route');
-const connectDatabases = require('./configs/init.db');
+const {connectDatabases} = require('./configs/init.db');
 
 const app = express();
 
@@ -28,7 +26,7 @@ app.use('/api/test', (req, res, next) => {
 app.use(globalExceptionHandler)
 
 connectDatabases()
-    .then((redisClient) => {
+    .then(() => {
         app.listen(8000, () => {
             console.log("Listening on port 8000");
         })

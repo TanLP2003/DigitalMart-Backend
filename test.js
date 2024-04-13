@@ -17,9 +17,6 @@ const config = require('./src/configs/config');
 //     console.log(value);
 //     await client.disconnect();
 // }
-const client = redis.createClient(config.redis.port, config.redis.host, {
-    password: config.redis.password
-})
 
 async function testRedis() {
     client.set('my name', "le phu tan");
