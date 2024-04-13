@@ -8,7 +8,8 @@ module.exports = {
     addProduct: async (req, res, next) => {
         try {
             console.log(req.body);
-            const newProduct = await productService.createProduct(req.body);
+            console.log(req.files);
+            const newProduct = await productService.createProduct(req.body, req.files);
             res.status(201).json(newProduct);   
         }
         catch (err) {

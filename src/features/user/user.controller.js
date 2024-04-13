@@ -24,7 +24,7 @@ module.exports = {
         try {
             const userId = req.headers['x-userId'];
             await UserService.logout(userId);
-            res.status(200).json();
+            res.status(StatusCodes.NO_CONTENT).json();
         }
         catch(err){
             next(err);
@@ -34,10 +34,18 @@ module.exports = {
         try {
             const userId = req.headers['x-userId'];
             const newToken = await UserService.refreshToken(userId, req.body.refreshToken);
-            res.status(200).json(newToken);
+            res.status(StatusCodes.OK).json(newToken);
         }
         catch (err){
             next(err);
         } 
+    },
+    changeAvatar: async (req, res, next) => {
+        try {
+
+        }
+        catch(err){
+            next(err);
+        }
     }
 }

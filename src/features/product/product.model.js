@@ -12,11 +12,15 @@ const productSchema = new Schema({
         double: true,
         required: true
     },
-    cover: {
-        type: String,
-        required: true
+    images: {
+        type: [String],
+        default: []
     },
     brand: String,
+    stock: {
+        type: Number,
+        required: true
+    },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'categories',

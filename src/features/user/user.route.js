@@ -1,4 +1,5 @@
 const userRouter = require('express').Router();
+const uploadMulter = require('../../configs/multer');
 const Authentication = require('../../middlewares/checkAuth');
 const Validation = require('../../middlewares/validation');
 const { signupRequestValidate, loginRequestValidate } = require('../../validators/auth.validation');
@@ -8,5 +9,6 @@ userRouter.post('/signup', Validation(signupRequestValidate), UserController.reg
 userRouter.post('/login', Validation(loginRequestValidate), UserController.login);
 userRouter.post('/logout', Authentication, UserController.logout);
 userRouter.post('/refreshToken', Authentication, UserController.refreshToken);
+userRouter.put('/changeAvatar', uploadMulter.single('avatar'), UserController.changeAvatar);
 
 module.exports = userRouter;

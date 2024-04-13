@@ -1,12 +1,14 @@
 const UserRepo = require('./user.repo');
+const BasketRepo = require('../basket/basket.repo');
 const TokenService = require('../token/token.service');
-const {hashPassword, comparePassword} = require('../../utils/auth');
+const {comparePassword} = require('../../utils/auth');
 const { NotFound, BadRequest } = require('../../utils/createError');
 
 module.exports = {
     registerUser: async (user) => {
-        // user.password = await hashPassword(user.password);
-        return await UserRepo.createUser(user);
+        const newUser = await UserRepo.createUser(user);
+        await BasketRepo.createBasket(newUser.id);
+        return newUser;
     },
     login: async (username, password) => {
         const existedUser = await UserRepo.getUserByName(username);
@@ -27,5 +29,8 @@ module.exports = {
             accessToken: await TokenService.generateAccessToken(userId),
             refreshToken: await TokenService.generateRefreshToken(userId, token)
         }
+    },
+    changeAvatar: async (avatar) => {
+
     }
 }

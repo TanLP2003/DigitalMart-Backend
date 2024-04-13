@@ -8,6 +8,8 @@ const globalExceptionHandler = require('./middlewares/globalExceptionHandler');
 const productRouter = require('./features/product/product.route');
 const categoryRouter = require('./features/category/category.route');
 const userRouter = require('./features/user/user.route');
+const connectDatabases = require('./configs/init.db');
+
 const app = express();
 
 app.use(helmet());
@@ -19,17 +21,19 @@ app.use(xss());
 app.use('/api/product', productRouter)
 app.use('/api/category', categoryRouter);
 app.use('/api/user', userRouter);
-
+app.use('/api/test', (req, res, next) => {
+    res.status(200).json("OK");
+    console.log("hello-world")
+})
 app.use(globalExceptionHandler)
 
-mongoose.connect(config.mongo.uri)
-    .then(() => {
+connectDatabases()
+    .then((redisClient) => {
         app.listen(8000, () => {
-            console.log("Listening on port 8000")
+            console.log("Listening on port 8000");
         })
     })
     .catch((err) => {
         console.log(err);
+        process.exit();
     })
-
-// mongoose.set('bufferTimeoutMS', 3600000)
