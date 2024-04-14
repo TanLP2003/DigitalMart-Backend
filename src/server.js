@@ -6,7 +6,9 @@ const globalExceptionHandler = require('./middlewares/globalExceptionHandler');
 const productRouter = require('./features/product/product.route');
 const categoryRouter = require('./features/category/category.route');
 const userRouter = require('./features/user/user.route');
+const basketRouter = require('./features/basket/basket.route');
 const {connectDatabases} = require('./configs/init.db');
+const favoriteRouter = require('./features/favorite/favorite.route');
 
 const app = express();
 
@@ -19,10 +21,13 @@ app.use(xss());
 app.use('/api/product', productRouter)
 app.use('/api/category', categoryRouter);
 app.use('/api/user', userRouter);
-app.use('/api/test', (req, res, next) => {
-    res.status(200).json("OK");
-    console.log("hello-world")
-})
+app.use('/api/basket', basketRouter)
+app.use('/api/favorite', favoriteRouter);
+
+// app.use('/api/test', (req, res, next) => {
+//     res.status(200).json("OK");
+//     console.log("hello-world")
+// })
 app.use(globalExceptionHandler)
 
 connectDatabases()

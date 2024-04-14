@@ -16,7 +16,9 @@ const basketItemSchema = new Schema({
 const basketSchema = new Schema({
     userId: {
         type: mongoose.Types.ObjectId,
-        ref: 'users'
+        ref: 'users',
+        index: true,
+        unique: true
     },
     items: {
         type: [basketItemSchema],

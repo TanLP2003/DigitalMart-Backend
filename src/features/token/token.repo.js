@@ -2,7 +2,6 @@ const Token = require('./token.model');
 const crypto = require('crypto');
 const config = require('../../configs/config');
 const { generateToken } = require('../../utils/auth');
-const { refreshToken } = require('../user/user.service');
 
 module.exports = {
     generateRefreshToken: async (userId) => {
