@@ -7,7 +7,8 @@ const redisClient = createClient({
     socket: {
         host: config.redis.host,
         port: config.redis.port
-    }
+    },
+    // username: config.redis.username
 });
 
 const connectDatabases = async () => {

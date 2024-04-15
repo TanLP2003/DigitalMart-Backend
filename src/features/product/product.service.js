@@ -21,8 +21,18 @@ module.exports = {
         const result = await productRepo.deleteProduct(id);
         if(!result) throw BadRequest("Bad request");
     },
-    updateProduct: async (id, update) => {
-        return await productRepo.updateProduct(id, update);
+    updateProduct: async (id, updateBody, newImage, deletedImage) => {
+        if(updateBody.category){
+            const category = await categoryRepo.getById(updateBody.category);
+            console.log(category);
+            if (!category) throw BadRequest(`Category is not existed!`);
+        }
+        let urls = [];
+        if(newImage.length > 0){
+            urls = await UploadService.uploadMultiFile(newImage);
+        }
+        if(!deletedImage) deletedImage = [];
+        return await productRepo.updateProduct(id, updateBody, urls, deletedImage);
     },
     getByCategory: async (categoryId) => {
         return await productRepo.getByCategory(categoryId);

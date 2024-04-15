@@ -3,7 +3,7 @@ const { BadRequest } = require('../../utils/createError');
 const TokenRepo = require('./token.repo');
 
 module.exports = {
-    generateRefreshToken: async(userId) => {
+    generateRefreshToken: async(userId, role) => {
         const existedToken = await TokenRepo.getByUserId(userId);
         if (existedToken) {
             try {
@@ -14,10 +14,10 @@ module.exports = {
                 await TokenRepo.deleteByUserId(userId);
             }
         }
-        return await TokenRepo.generateRefreshToken(userId);
+        return await TokenRepo.generateRefreshToken(userId, role);
     },
-    generateAccessToken: async (userId) => {
-        return TokenRepo.generateAccessToken(userId);
+    generateAccessToken: async (userId, role) => {
+        return TokenRepo.generateAccessToken(userId, role);
     },
     deleteByUserId: async (userId) => {
         await TokenRepo.deleteByUserId(userId);

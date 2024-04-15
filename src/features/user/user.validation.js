@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 const loginRequestValidate = (loginReq) => {
+    console.log(loginReq);
     const loginReqSchema = Joi.object({
         username: Joi.string().required(),
         password: Joi.string().required()
@@ -17,7 +18,15 @@ const signupRequestValidate = (signupReq) => {
     return signupReqSchema.validate(signupReq, {abortEarly: true});
 }
 
+const refreshTokenReqValidate = (req) => {
+    const refreshTokenReqSchema = Joi.object({
+        refreshToken: Joi.string().required()
+    })
+    return refreshTokenReqSchema.validate(req);
+}
+
 module.exports = {
     loginRequestValidate,
-    signupRequestValidate
+    signupRequestValidate,
+    refreshTokenReqValidate
 }

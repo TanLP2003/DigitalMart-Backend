@@ -7,8 +7,10 @@ const productRouter = require('./features/product/product.route');
 const categoryRouter = require('./features/category/category.route');
 const userRouter = require('./features/user/user.route');
 const basketRouter = require('./features/basket/basket.route');
-const {connectDatabases} = require('./configs/init.db');
 const favoriteRouter = require('./features/favorite/favorite.route');
+const orderRouter = require('./features/order/order.route');
+const {connectDatabases} = require('./configs/init.db');
+
 
 const app = express();
 
@@ -23,7 +25,7 @@ app.use('/api/category', categoryRouter);
 app.use('/api/user', userRouter);
 app.use('/api/basket', basketRouter)
 app.use('/api/favorite', favoriteRouter);
-
+app.use('/api/order', orderRouter);
 // app.use('/api/test', (req, res, next) => {
 //     res.status(200).json("OK");
 //     console.log("hello-world")

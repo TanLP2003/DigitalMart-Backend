@@ -7,7 +7,8 @@ const config = {
     redis: {
         password: process.env.REDIS_PASSWORD,
         host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT
+        port: process.env.REDIS_PORT,
+        username: process.env.REDIS_USERNAME
     },
     jwt: {
         secretKey: process.env.SECRET_KEY

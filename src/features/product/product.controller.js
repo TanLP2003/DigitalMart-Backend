@@ -7,8 +7,8 @@ module.exports = {
     },
     addProduct: async (req, res, next) => {
         try {
-            console.log(req.body);
-            console.log(req.files);
+            // console.log(req.body);
+            // console.log(req.files);
             const newProduct = await productService.createProduct(req.body, req.files);
             res.status(201).json(newProduct);   
         }
@@ -28,7 +28,7 @@ module.exports = {
     updateProduct: async (req, res, next) => {
         const {id} = req.params;
         try {
-            const updatedProduct = await productService.updateProduct(id, req.body);
+            const updatedProduct = await productService.updateProduct(id, req.body.data, req.files, req.body.deletedImages);
             res.status(200).json(updatedProduct);
         }
         catch(err) {

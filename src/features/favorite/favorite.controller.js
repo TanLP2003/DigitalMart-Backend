@@ -1,12 +1,11 @@
 const { StatusCodes } = require('http-status-codes');
 const FavorService = require('./favorite.service');
-const favoriteService = require('./favorite.service');
 
 module.exports = {
-    getWishList: async (req, res, next) => {
+    getFavoriteOfUser: async (req, res, next) => {
         try {
-            const userId = req.params.userId;
-            res.status(StatusCodes.OK).json(await FavorService.getWishList(userId));
+            const userId = req.headers['x-userId'];
+            res.status(StatusCodes.OK).json(await FavorService.getFavoriteOfUser(userId));
         }
         catch(err) {
             next(err);
@@ -14,7 +13,8 @@ module.exports = {
     },
     addProductToList: async (req, res, next) => {
         try {
-            const {userId, productId} = req.params;
+            const {productId} = req.params;
+            const userId = req.headers['x-userId'];
             res.status(StatusCodes.OK).json(await FavorService.addProductToList(userId, productId));
         }
         catch (err) {
@@ -23,8 +23,9 @@ module.exports = {
     },
     removeFromList: async (req, res, next) => {
         try {
-            const { userId, productId } = req.params;
-            res.status(StatusCodes.OK).json(await favoriteService.removeFromFavorite(userId, productId));
+            const { productId } = req.params;
+            const userId = req.headers['x-userId'];
+            res.status(StatusCodes.OK).json(await FavoriteService.removeFromFavorite(userId, productId));
         }
         catch (err) {
             next(err)

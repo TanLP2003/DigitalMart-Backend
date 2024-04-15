@@ -4,15 +4,15 @@ const config = require('../../configs/config');
 const { generateToken } = require('../../utils/auth');
 
 module.exports = {
-    generateRefreshToken: async (userId) => {
+    generateRefreshToken: async (userId, role) => {
         const newRefreshToken = await Token.create({
             userId: userId,
-            refreshToken: generateToken({userId: userId}, {expiresIn: '1h'}),
+            refreshToken: generateToken({userId: userId, role: role}, {expiresIn: '1h'}),
         });
         return newRefreshToken.refreshToken;
     },
-    generateAccessToken: async (userId) => {
-        return generateToken({userId: userId}, {expiresIn: '10m'});
+    generateAccessToken: async (userId, role) => {
+        return generateToken({userId: userId, role: role}, {expiresIn: '10m'});
     },
     getByUserId: async (userId) => {
         return await Token.findOne({userId: userId});

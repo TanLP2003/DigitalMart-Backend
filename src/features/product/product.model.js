@@ -28,8 +28,8 @@ const productSchema = new Schema({
         index: true
     },
     metadata: {
-        type: Map,   
-        of: String
+        type: Object,
+        default: {}
     }
 })
 
