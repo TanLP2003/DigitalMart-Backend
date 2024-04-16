@@ -38,6 +38,11 @@ const orderSchema = new Schema({
         type: Number,
         required: true
     }
+}, {
+    timestamps: {
+        createdAt: true,
+        updatedAt: false
+    }
 })
 
 orderSchema.pre('save', async function (next) {

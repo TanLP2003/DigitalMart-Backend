@@ -16,6 +16,6 @@ productRouter.get('/:id', getById);
 productRouter.post('/', Authentication(CONSTANT.ROLE.ADMIN), uploadMulter.array('images'), Validation(addProductValidate), addProduct);
 productRouter.delete('/:id', Authentication(CONSTANT.ROLE.ADMIN), deleteProduct);
 productRouter.put('/:id', Authentication(CONSTANT.ROLE.ADMIN), uploadMulter.array('newImages'), Validation(updateProductValidate), updateProduct);
-productRouter.get('/:category', getByCategory);
+productRouter.get('/category/:category', getByCategory);
 
 module.exports = productRouter;

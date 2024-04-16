@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const {Schema} = mongoose;
 
 const productSchema = new Schema({
@@ -31,6 +32,11 @@ const productSchema = new Schema({
         type: Object,
         default: {}
     }
+}, {
+    timestamps: {
+        createdAt: true,
+        updatedAt: false
+    }
 })
 
 productSchema.pre('save', function(next) {
@@ -40,5 +46,7 @@ productSchema.pre('save', function(next) {
     }
     next();
 })
+
+productSchema.plugin(mongoosePaginate);
 
 module.exports = Product = mongoose.model("products", productSchema);

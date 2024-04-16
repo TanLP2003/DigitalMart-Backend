@@ -36,6 +36,14 @@ module.exports = {
         }
     },
     getByCategory: async (req, res, next) => {
-        res.status(200).json(await productService.getByCategory(req.params.category))
+        const pageNumber = req.query.page || 1;
+        const result = await productService.getByCategory(req.params.category, {pageNumber: pageNumber, pageSize: 2});
+        res.status(200).json({
+            products: result.docs,
+            page: result.page,
+            totalPages: result.totalPages,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage
+        });
     }
 }

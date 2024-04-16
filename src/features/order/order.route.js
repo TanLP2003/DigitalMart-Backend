@@ -7,6 +7,6 @@ const orderRouter = require('express').Router();
 
 orderRouter.get('/', Authentication(CONSTANT.ROLE.CUSTOMER), OrderController.getOrderOfUser);
 orderRouter.get('/all', Authentication(CONSTANT.ROLE.ADMIN), OrderController.getAllOrder);
-orderRouter.post('/', Authentication(CONSTANT.ROLE.CUSTOMER), Validation(createOrderReqValidate), OrderController.createOrder);
+// orderRouter.post('/', Authentication(CONSTANT.ROLE.CUSTOMER), Validation(createOrderReqValidate), OrderController.createOrder);
 
 module.exports = orderRouter;

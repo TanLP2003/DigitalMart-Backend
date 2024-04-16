@@ -39,5 +39,15 @@ module.exports = {
         }
         const updatedBasket = await (await basket.save()).populate('items.product');
         return updatedBasket;
+    },
+    getBasketItemInfo: (basket, basketItemId) => {
+        return basket.items.id(basketItemId);
+    },
+    deleteFromBasket: async (basket, deletedBasket) => {
+        deletedBasket.map(item => {
+            item.deleteOne();
+        })
+        const updatedBasket = (await basket.save()).populate('items.product');
+        return updatedBasket;
     }
 }

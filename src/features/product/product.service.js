@@ -34,7 +34,7 @@ module.exports = {
         if(!deletedImage) deletedImage = [];
         return await productRepo.updateProduct(id, updateBody, urls, deletedImage);
     },
-    getByCategory: async (categoryId) => {
-        return await productRepo.getByCategory(categoryId);
+    getByCategory: async (categoryId, options) => {
+        return await productRepo.getByCategory(categoryId, options);
     }
 }

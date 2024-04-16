@@ -29,9 +29,10 @@ const deleteProduct = async (id) => {
     return !deleteProduct ? false : true;
 }
 
-const getByCategory = async (category) => {
-    const products = await Product.find({category: category});
-    return products;
+const getByCategory = async (category, options) => {
+    const {pageNumber, pageSize} = options;
+    const result = await Product.paginate({category: category}, {page: pageNumber, limit: pageSize});
+    return result;
 }
 
 

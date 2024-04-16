@@ -11,7 +11,9 @@ const config = {
         username: process.env.REDIS_USERNAME
     },
     jwt: {
-        secretKey: process.env.SECRET_KEY
+        secretKey: process.env.SECRET_KEY,
+        ACC_TOKEN_TTL: '10m',
+        REF_TOKEN_TTL: '1h'
     },
     cloudinary: {
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,

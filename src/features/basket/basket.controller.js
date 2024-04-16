@@ -27,12 +27,21 @@ module.exports = {
         try {
             const userId = req.headers['x-userId'];
             console.log(userId);
-            const updatedBasket = await BasketService.updateBasket(userId, req.body.productId, req.body.quantity);
+            const updatedBasket = await BasketService.updateBasket(userId, req.body.productId, req.body.incrementBy);
             res.status(StatusCodes.OK).json(updatedBasket);
         }
         catch(err) {
             next(err);
         }
     },
-    
+    checkoutBasket: async (req, res, next) => {
+        try {
+            const userId = req.headers['x-userId'];
+            const newOrder = await BasketService.checkoutSelectedItems(userId, req.body.selectedItems);
+            res.status(StatusCodes.OK).json(newOrder);
+        }
+        catch (err) {
+            next(err);
+        }
+    }
 }

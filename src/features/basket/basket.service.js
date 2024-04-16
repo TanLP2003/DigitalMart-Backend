@@ -1,5 +1,6 @@
 const BasketRepo = require('./basket.repo');
 const ProductRepo = require('../product/product.repo');
+const OrderService = require('../order/order.repo');
 const { BadRequest } = require('../../utils/createError');
 
 module.exports = {
@@ -36,7 +37,30 @@ module.exports = {
         await BasketRepo.writeBasketToCache(userId, updatedBasket);
         return updatedBasket;
     },
-    checkoutSelectedItems: async (userId, basket) => {
-
+    checkoutSelectedItems: async (userId, selectedItems) => {
+        const basket = await BasketRepo.getBasketFromDb(userId);
+        let totalPrice = 0;
+        const needDeletedBasketItems = [];
+        const orderItems = selectedItems.map(item => {
+            const basketItem = BasketRepo.getBasketItemInfo(basket, item);
+            console.log("basket Item", basketItem);
+            if(!basketItem) throw BadRequest("Product is not in basket");
+            const orderItem = {
+                product: basketItem.product,
+                quantity: basketItem.quantity,
+                subTotalPrice: basketItem.product.price * basketItem.quantity
+            };
+            totalPrice += orderItem.subTotalPrice;
+            needDeletedBasketItems.push(basketItem);
+            return orderItem;
+        });
+        const orderInfo = {
+            items: orderItems,
+            totalPrice: totalPrice
+        };
+        const newOrder = await OrderService.createOrder(userId, orderInfo);
+        const updatedBasket = await BasketRepo.deleteFromBasket(basket, needDeletedBasketItems);
+        await BasketRepo.writeBasketToCache(userId, updatedBasket);
+        return newOrder;
     }
 }

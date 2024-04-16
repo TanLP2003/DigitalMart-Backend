@@ -7,12 +7,12 @@ module.exports = {
     generateRefreshToken: async (userId, role) => {
         const newRefreshToken = await Token.create({
             userId: userId,
-            refreshToken: generateToken({userId: userId, role: role}, {expiresIn: '1h'}),
+            refreshToken: generateToken({userId: userId, role: role}, {expiresIn: config.jwt.REF_TOKEN_TTL}),
         });
         return newRefreshToken.refreshToken;
     },
     generateAccessToken: async (userId, role) => {
-        return generateToken({userId: userId, role: role}, {expiresIn: '10m'});
+        return generateToken({userId: userId, role: role}, {expiresIn: config.jwt.ACC_TOKEN_TTL});
     },
     getByUserId: async (userId) => {
         return await Token.findOne({userId: userId});
