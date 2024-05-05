@@ -37,7 +37,7 @@ module.exports = {
     },
     getByCategory: async (req, res, next) => {
         const pageNumber = req.query.page || 1;
-        const result = await productService.getByCategory(req.params.category, {pageNumber: pageNumber, pageSize: 2});
+        const result = await productService.getByCategory(req.params.category, {pageNumber: pageNumber, pageSize: 9999});
         res.status(200).json({
             products: result.docs,
             page: result.page,
@@ -45,5 +45,9 @@ module.exports = {
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage
         });
+    },
+    getProductToCache: async (req, res, next) => {
+        await productService.getProductToCache();
+        res.status(200).json({});
     }
 }

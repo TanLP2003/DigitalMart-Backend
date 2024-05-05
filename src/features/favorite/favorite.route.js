@@ -7,4 +7,4 @@ favoriteRouter.get('/', Authentication(CONSTANT.ROLE.CUSTOMER), FavoriteControll
 favoriteRouter.post('/:productId', Authentication(CONSTANT.ROLE.CUSTOMER), FavoriteController.addProductToList);
 favoriteRouter.delete('/:productId', Authentication(CONSTANT.ROLE.CUSTOMER), FavoriteController.removeFromList);
 
-module.exports = favoriteRouter;
+module.exports = favoriteRouter;    

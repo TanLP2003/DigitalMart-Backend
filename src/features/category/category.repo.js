@@ -1,5 +1,5 @@
 const {Category} = require('./category.model');
-
+const Product = require('../product/product.model');
 module.exports = {
     getAllCategory: async () => {
         return await Category.find({});

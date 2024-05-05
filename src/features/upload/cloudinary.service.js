@@ -10,6 +10,7 @@ cloudinary.config({
 
 module.exports = {
     uploadToCloudinary: async (buffer) => {
+        // console.log(typeof buffer);
         const uploadResult = await new Promise((resolve) => {
             cloudinary.uploader.upload_stream({
                 folder: 'hello-world',

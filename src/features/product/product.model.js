@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const productSchema = new Schema({
     name: {
@@ -18,10 +18,6 @@ const productSchema = new Schema({
         default: []
     },
     brand: String,
-    stock: {
-        type: Number,
-        required: true
-    },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'categories',
@@ -39,9 +35,9 @@ const productSchema = new Schema({
     }
 })
 
-productSchema.pre('save', function(next) {
-    if(this.isNew) {
-        console.log("product is new");
+productSchema.pre('save', function (next) {
+    if (this.isNew) {
+        // console.log("product is new");
         this.category = new mongoose.Types.ObjectId(this.category);
     }
     next();

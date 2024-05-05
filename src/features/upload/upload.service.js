@@ -4,7 +4,7 @@ module.exports = {
     uploadMultiFile: async (files) => {
         const urls = await Promise.all(files.map(async (file) => {
             try {
-                const url = await uploadToCloudinary(file.buffer);
+                const url = await uploadToCloudinary(Buffer.from(file.buffer.data));
                 return url;
             } catch (err) {
                 console.log("upload error: ", err);
@@ -14,7 +14,7 @@ module.exports = {
         return urls.filter(url => url !== null);
     },
     uploadSingleFile: async (file) => {
-        const url = await uploadToCloudinary(file.buffer);        
+        const url = await uploadToCloudinary(file.buffer);
         return url;
     }
 }
