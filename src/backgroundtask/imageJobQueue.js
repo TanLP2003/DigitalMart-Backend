@@ -28,7 +28,7 @@ imageProcessQueue.on("completed", async (job, result) => {
     console.log("completed job !!!!!!!");
 })
 module.exports = {
-    createJob: async (productId, newImages, deletedImages) => {
+    createProcessImageJob: async (productId, newImages, deletedImages) => {
         const newJob = {
             productId: productId,
             newImages: newImages,

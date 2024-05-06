@@ -9,7 +9,7 @@ module.exports = {
             const basket = await BasketService.getBasket(userId);
             res.status(StatusCodes.OK).json(basket);
         }
-        catch(err) {
+        catch (err) {
             next(err);
         }
     },
@@ -23,22 +23,33 @@ module.exports = {
     //         next(err);
     //     }
     // },
-    updateBasket: async (req, res, next) => {
-        try {
-            const userId = req.headers['x-userId'];
-            console.log(userId);
-            const updatedBasket = await BasketService.updateBasket(userId, req.body.productId, req.body.incrementBy);
-            res.status(StatusCodes.OK).json(updatedBasket);
-        }
-        catch(err) {
-            next(err);
-        }
-    },
+    // updateBasket: async (req, res, next) => {
+    //     try {
+    //         const userId = req.headers['x-userId'];
+    //         console.log(userId);
+    //         const updatedBasket = await BasketService.updateBasket(userId, req.body.productId, req.body.incrementBy);
+    //         res.status(StatusCodes.OK).json(updatedBasket);
+    //     }
+    //     catch(err) {
+    //         next(err);
+    //     }
+    // },
     checkoutBasket: async (req, res, next) => {
         try {
             const userId = req.headers['x-userId'];
             const newOrder = await BasketService.checkoutSelectedItems(userId, req.body.selectedItems);
             res.status(StatusCodes.OK).json(newOrder);
+        }
+        catch (err) {
+            next(err);
+        }
+    },
+    updateBasket: async (req, res, next) => {
+        try {
+            const userId = req.headers['x-userId'];
+            await BasketService.updateBasket(userId, req.body.product, req.body.incrementBy);
+            const updateBasket = await BasketService.getBasket(userId);
+            res.status(StatusCodes.OK).json(updateBasket);
         }
         catch (err) {
             next(err);

@@ -39,32 +39,32 @@ module.exports = {
     //     await BasketRepo.writeBasketToCache(userId, updatedBasket);
     //     return updatedBasket;
     // },
-    checkoutSelectedItems: async (userId, selectedItems) => {
-        const basket = await BasketRepo.getBasketFromDb(userId);
-        let totalPrice = 0;
-        const needDeletedBasketItems = [];
-        const orderItems = selectedItems.map(item => {
-            const basketItem = BasketRepo.getBasketItemInfo(basket, item);
-            console.log("basket Item", basketItem);
-            if (!basketItem) throw BadRequest("Product is not in basket");
-            const orderItem = {
-                product: basketItem.product,
-                quantity: basketItem.quantity,
-                subTotalPrice: basketItem.product.price * basketItem.quantity
-            };
-            totalPrice += orderItem.subTotalPrice;
-            needDeletedBasketItems.push(basketItem);
-            return orderItem;
-        });
-        const orderInfo = {
-            items: orderItems,
-            totalPrice: totalPrice
-        };
-        const newOrder = await OrderService.createOrder(userId, orderInfo);
-        const updatedBasket = await BasketRepo.deleteFromBasket(basket, needDeletedBasketItems);
-        await BasketRepo.writeBasketToCache(userId, updatedBasket);
-        return newOrder;
-    },
+    // checkoutSelectedItems: async (userId, selectedItems) => {
+    //     const basket = await BasketRepo.getBasketFromDb(userId);
+    //     let totalPrice = 0;
+    //     const needDeletedBasketItems = [];
+    //     const orderItems = selectedItems.map(item => {
+    //         const basketItem = BasketRepo.getBasketItemInfo(basket, item);
+    //         console.log("basket Item", basketItem);
+    //         if (!basketItem) throw BadRequest("Product is not in basket");
+    //         const orderItem = {
+    //             product: basketItem.product,
+    //             quantity: basketItem.quantity,
+    //             subTotalPrice: basketItem.product.price * basketItem.quantity
+    //         };
+    //         totalPrice += orderItem.subTotalPrice;
+    //         needDeletedBasketItems.push(basketItem);
+    //         return orderItem;
+    //     });
+    //     const orderInfo = {
+    //         items: orderItems,
+    //         totalPrice: totalPrice
+    //     };
+    //     const newOrder = await OrderService.createOrder(userId, orderInfo);
+    //     const updatedBasket = await BasketRepo.deleteFromBasket(basket, needDeletedBasketItems);
+    //     await BasketRepo.writeBasketToCache(userId, updatedBasket);
+    //     return newOrder;
+    // },
     updateBasket: async (userId, product, incrementBy) => {
         const productId = product._id;
         let productInBasket = await redisRepo.hget(`basket:${userId}`, `product:${productId}`);
@@ -87,20 +87,39 @@ module.exports = {
         productInventory.stock = stock - incrementBy;
         quantityInBasket += incrementBy;
         await redisRepo.jsonSet(`inventory:${productId}`, '.', productInventory);
-        // await redisRepo.hset(`basket:${userId}:product:quantity`, `${productId}`, quantityInBasket);
         await redisRepo.hset(`basket:${userId}`, `product:${productId}`, JSON.stringify({ product: product, quantity: quantityInBasket }));
+        // return await getBasket(userId);
     },
     getBasket: async (userId) => {
         let productList = [];
         const basketList = await redisRepo.hgetall(`basket:${userId}`);
-        if (!basketList) return productList;
+        if (!basketList) return { userId: userId, items: productList };
         for (const key of Object.keys(basketList)) {
             let productString = await redisRepo.hget(`basket:${userId}`, key);
             productList.push(JSON.parse(productString));
         }
-        return productList;
+        return { userId: userId, items: productList };
     },
-    createBasket: async (userId) => {
-
+    checkoutSelectedItems: async (userId, selectedItem) => {
+        let totalPrice = 0;
+        let orderItemList = await Promise.all(selectedItem.map(async item => {
+            const productInBasketString = await redisRepo.hget(`basket:${userId}`, `product:${item}`);
+            const { product, quantity } = JSON.parse(productInBasketString);
+            const orderItem = {
+                product: product,
+                quantity: quantity,
+                subTotalPrice: product.price * quantity
+            }
+            totalPrice += product.price * quantity;
+            await redisRepo.hdel(`basket:${userId}`, `product:${item}`);
+            return orderItem;
+        }));
+        console.log(orderItemList);
+        const orderInfo = {
+            items: orderItemList,
+            totalPrice: totalPrice
+        }
+        const newOrder = await OrderService.createOrder(userId, orderInfo);
+        return newOrder;
     }
 }

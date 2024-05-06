@@ -2,7 +2,7 @@ const { BadRequest, NotFound } = require('../../utils/createError');
 const productRepo = require('./product.repo');
 const categoryRepo = require('../category/category.repo');
 const UploadService = require('../upload/upload.service');
-const { createJob } = require('../../backgroundtask/routineJobQueue');
+const { createProcessImageJob } = require('../../backgroundtask/imageJobQueue');
 
 module.exports = {
     getById: async (id) => {
@@ -15,7 +15,7 @@ module.exports = {
         // const urls = await UploadService.uploadMultiFile(images);
         // product.images = urls;
         const newProduct = await productRepo.createProduct(product);
-        await createJob(newProduct.id, images, []);
+        await createProcessImageJob(newProduct.id, images, []);
         return newProduct;
     },
     deleteProduct: async (id) => {
@@ -29,7 +29,7 @@ module.exports = {
             if (!category) throw BadRequest(`Category is not existed!`);
         }
         if (!deletedImage) deletedImage = [];
-        await createJob(id, newImages, deletedImage);
+        await createProcessImageJob(id, newImages, deletedImage);
         return await productRepo.updateProduct(id, updateBody);
     },
     getByCategory: async (categoryId, options) => {

@@ -11,18 +11,18 @@ module.exports = {
         return orders;
     },
     getOrderByUserId: async (userId) => {
-        const orders = await Order.find({userId: userId})
-        .populate({
-            path: 'items',
-            populate: {path: 'product'}
-        })
-        .exec();
+        const orders = await Order.find({ userId: userId })
+            .populate({
+                path: 'items',
+                populate: { path: 'product' }
+            })
+            .exec();
         return orders;
     },
     createOrder: async (userId, orderInfo) => {
-        const newOrder = await(await Order.create({userId: userId, ...orderInfo})).populate({
+        const newOrder = await (await Order.create({ userId: userId, ...orderInfo })).populate({
             path: 'items',
-            populate: { path: 'items' }
+            populate: { path: 'product' }
         });
         return newOrder;
     }

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { BadRequest } = require('../../utils/createError');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const orderItemSchema = new Schema({
     product: {
@@ -16,14 +16,16 @@ const orderItemSchema = new Schema({
         type: Number,
         required: true
     }
+}, {
+    _id: false
 })
 
-orderItemSchema.pre('save', async function(next){
+orderItemSchema.pre('save', async function (next) {
     const product = await mongoose.model('products').findById(this.product);
-    if(!product) {
+    if (!product) {
         return next(BadRequest('Product is not existed!'));
     }
-    if(this.subTotalPrice !== product.price * this.quantity) next(BadRequest("SubTotalPrice is not valid"));
+    if (this.subTotalPrice !== product.price * this.quantity) next(BadRequest("SubTotalPrice is not valid"));
     next();
 })
 
@@ -47,7 +49,7 @@ const orderSchema = new Schema({
 
 orderSchema.pre('save', async function (next) {
     const totalPrice = this.items.reduce((acc, item) => acc + item.subTotalPrice, 0);
-    if(this.totalPrice !== totalPrice) next(BadRequest('TotalPrice is not valid'));
+    if (this.totalPrice !== totalPrice) next(BadRequest('TotalPrice is not valid'));
     next();
 })
 

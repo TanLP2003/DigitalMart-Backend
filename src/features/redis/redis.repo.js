@@ -36,7 +36,7 @@ module.exports = {
         await redisClient.del(key);
     },
     hgetall: async (key) => {
-        await redisClient.hGetAll(key);
+        return await redisClient.hGetAll(key);
     },
     hset: async (hash, key, value) => {
         await redisClient.hSet(hash, key, value);

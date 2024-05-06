@@ -12,8 +12,8 @@ const config = {
     },
     jwt: {
         secretKey: process.env.SECRET_KEY,
-        ACC_TOKEN_TTL: '10m',
-        REF_TOKEN_TTL: '1h'
+        ACC_TOKEN_TTL: '5h',
+        REF_TOKEN_TTL: '10h'
     },
     cloudinary: {
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,

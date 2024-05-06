@@ -7,6 +7,7 @@ module.exports = {
         return orders;
     },
     createOrder: async (userId, orderInfo) => {
+        console.log("create order ", orderInfo);
         const newOrder = await OrderRepo.createOrder(userId, orderInfo);
         return newOrder;
     },
