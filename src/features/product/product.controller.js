@@ -10,7 +10,7 @@ module.exports = {
             // console.log(req.body);
             // console.log(req.files);
             const newProduct = await productService.createProduct(req.body, req.files);
-            res.status(201).json(newProduct);   
+            res.status(201).json(newProduct);
         }
         catch (err) {
             next(err)
@@ -26,18 +26,18 @@ module.exports = {
         }
     },
     updateProduct: async (req, res, next) => {
-        const {id} = req.params;
+        const { id } = req.params;
         try {
             const updatedProduct = await productService.updateProduct(id, req.body.data, req.files, req.body.deletedImages);
             res.status(200).json(updatedProduct);
         }
-        catch(err) {
+        catch (err) {
             next(err);
         }
     },
     getByCategory: async (req, res, next) => {
         const pageNumber = req.query.page || 1;
-        const result = await productService.getByCategory(req.params.category, {pageNumber: pageNumber, pageSize: 9999});
+        const result = await productService.getByCategory(req.params.category, { pageNumber: pageNumber, pageSize: 9999 });
         res.status(200).json({
             products: result.docs,
             page: result.page,

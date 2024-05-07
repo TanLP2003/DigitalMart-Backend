@@ -1,4 +1,4 @@
-const userRepo = require('../user/user.repo');
+const { sendOrderInfo } = require('../nodemail/sendOrderInfo');
 const OrderRepo = require('./order.repo');
 
 module.exports = {
@@ -7,8 +7,9 @@ module.exports = {
         return orders;
     },
     createOrder: async (userId, orderInfo) => {
-        console.log("create order ", orderInfo);
+        // console.log("create order ", orderInfo);
         const newOrder = await OrderRepo.createOrder(userId, orderInfo);
+        await sendOrderInfo(newOrder.user.email, newOrder);
         return newOrder;
     },
     getAllOrder: async () => {

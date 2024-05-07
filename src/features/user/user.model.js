@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { hashPassword } = require('../../utils/auth');
-const {Schema} = mongoose;
+const CONSTANT = require('../../utils/constant');
+const { Schema } = mongoose;
 
 const userSchema = new Schema({
     username: {
@@ -14,12 +15,12 @@ const userSchema = new Schema({
     },
     avatar: {
         type: String,
-        default: ''
+        default: CONSTANT.DEFAULT_AVATAR
     },
-    phoneNumber: {
+    phonenumber: {
         type: String,
         validate: {
-            validator: function(v) {
+            validator: function (v) {
                 return /^0\d{9,10}$/.test(v)
             },
             message: props => `${props.value} is not a valid number!`
@@ -28,12 +29,13 @@ const userSchema = new Schema({
     email: {
         type: String,
         validate: {
-            validator: function(v) {
+            validator: function (v) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return emailRegex.test(v);
             },
             message: props => `${props.value} is not a valid email!`
-        }
+        },
+        required: true
     },
     gender: {
         type: String,
@@ -51,15 +53,23 @@ const userSchema = new Schema({
         },
         default: "CUSTOMER",
         required: true
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: {
+        type: String,
+        default: ''
     }
 })
 
-userSchema.pre('save', async function (next) {
-    console.log("userModel", this);
-    if(this.isModified('password')){
-        this.password = await hashPassword(this.password);
-    }
-    next();
-})
+// userSchema.pre('save', async function (next) {
+//     console.log("userModel", this);
+//     if (this.isModified('password')) {
+//         this.password = await hashPassword(this.password);
+//     }
+//     next();
+// })
 
 module.exports = User = mongoose.model('users', userSchema);

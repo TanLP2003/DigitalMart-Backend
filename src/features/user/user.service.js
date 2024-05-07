@@ -1,20 +1,40 @@
 const UserRepo = require('./user.repo');
 const TokenService = require('../token/token.service');
-const {comparePassword} = require('../../utils/auth');
+const { comparePassword, hashPassword, generateToken } = require('../../utils/auth');
 const { NotFound, BadRequest } = require('../../utils/createError');
+const { sendVerificationRequest } = require('../nodemail/sendVerificationEmail');
+const UploadService = require('../upload/upload.service');
 
 module.exports = {
     registerUser: async (user) => {
-        const newUser = await UserRepo.createUser(user);
-        return newUser;
+        const existedUser = await UserRepo.getUserByEmail(user.email);
+        if (existedUser) throw BadRequest(`Email ${user.email} is already registed!`);
+        user.password = await hashPassword(user.password);
+        const verificationToken = generateToken({ email: user.email });
+        user.verificationToken = verificationToken;
+        await UserRepo.createUser(user);
+        // return newUser;
+        await sendVerificationRequest(user.email, verificationToken);
     },
-    login: async (username, password) => {
-        const existedUser = await UserRepo.getUserByName(username);
-        if(!existedUser) throw NotFound(`User with name ${username} does not exist`);
-        const result = comparePassword(password, existedUser.password);
-        if(!result) throw BadRequest(`Wrong Password`); 
-        console.log(existedUser.role);
+    login: async (email, password) => {
+        const existedUser = await UserRepo.getUserByEmail(email);
+        if (!existedUser) throw NotFound(`User with email ${email} does not exist`);
+        if (!existedUser.isVerified) {
+            throw BadRequest("Account is not verified!");
+        }
+        const result = await comparePassword(password, existedUser.password);
+        console.log(result);
+        if (!result) throw BadRequest(`Wrong Password`);
+        // console.log(existedUser.role);
         return {
+            user: {
+                userId: existedUser.id,
+                username: existedUser.username,
+                email: existedUser.email,
+                phonenumber: existedUser.phonenumber,
+                avatar: existedUser.avatar,
+                gender: existedUser.gender
+            },
             accessToken: await TokenService.generateAccessToken(existedUser.id, existedUser.role),
             refreshToken: await TokenService.generateRefreshToken(existedUser.id, existedUser.role)
         }
@@ -23,13 +43,43 @@ module.exports = {
         await TokenService.deleteByUserId(userId);
     },
     refreshToken: async (userId, token) => {
+        const user = await UserRepo.getUserById(userId);
+        if (!user.isVerified) {
+            throw BadRequest("Account is not verified!");
+        }
         await TokenService.deleteByToken(userId, token);
         return {
             accessToken: await TokenService.generateAccessToken(userId),
             refreshToken: await TokenService.generateRefreshToken(userId, token)
         }
     },
-    changeAvatar: async (avatar) => {
-
+    changeAvatar: async (userId, avatar) => {
+        const user = await UserRepo.getUserById(userId);
+        if (!user.isVerified) {
+            throw BadRequest("Account is not verified!");
+        }
+        const avatarUrl = await UploadService.uploadSingleFile(avatar);
+        await UserRepo.changeUserAvatar(userId, avatarUrl);
+        return avatarUrl;
+    },
+    updateUserInfo: async (userId, newInfo) => {
+        const user = await UserRepo.getUserById(userId);
+        if (!user.isVerified) {
+            throw BadRequest("Account is not verified!");
+        }
+        const updatedUser = await UserRepo.updateUserInfo(userId, newInfo);
+        return updatedUser;
+    },
+    changePassword: async (userId, oldPassword, newPassword) => {
+        const user = await UserRepo.getUserById(userId);
+        if (!user) throw NotFound(`User does not exist`);
+        if (!user.isVerified) throw BadRequest("Account is not verified!");
+        const result = await comparePassword(oldPassword, user.password);
+        if (!result) throw BadRequest(`Wrong Password`);
+        await UserRepo.updateUserInfo(userId, { password: await hashPassword(newPassword) });
+    },
+    verifyUser: async (token) => {
+        const result = await UserRepo.verifyUser(token);
+        if (!result) throw BadRequest("Verification failed!");
     }
 }

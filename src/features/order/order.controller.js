@@ -19,5 +19,15 @@ module.exports = {
         catch (err) {
             next(err);
         }
-    }
+    },
+    // createOrder: async (req, res, next) => {
+    //     try {
+    //         const userId = req.headers['x-userId'];
+    //         const result = await OrderService.createOrder(userId, req.body);
+    //         res.status(StatusCodes.OK).json(result);
+    //     }
+    //     catch (err) {
+    //         next(err);
+    //     }
+    // }
 }

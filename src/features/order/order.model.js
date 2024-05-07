@@ -30,7 +30,7 @@ orderItemSchema.pre('save', async function (next) {
 })
 
 const orderSchema = new Schema({
-    userId: {
+    user: {
         type: mongoose.Types.ObjectId,
         ref: 'users',
         index: true
@@ -39,6 +39,29 @@ const orderSchema = new Schema({
     totalPrice: {
         type: Number,
         required: true
+    },
+    cardName: {
+        type: String,
+        required: true
+    },
+    cardNumber: {
+        type: String,
+        required: true
+    },
+    cvv: {
+        type: String,
+        required: true
+    },
+    expiration: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (v) {
+                var pattern = /^(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
+                return pattern.test(v);
+            },
+            message: props => `${props.value} is not a valid expired date`
+        }
     }
 }, {
     timestamps: {

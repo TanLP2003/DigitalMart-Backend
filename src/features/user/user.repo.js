@@ -5,7 +5,27 @@ module.exports = {
         const newUser = await User.create(user);
         return newUser;
     },
-    getUserByName: async (username) => {
-        return await User.findOne({username: username});
+    getUserByEmail: async (email) => {
+        return await User.findOne({ email: email });
+    },
+    changeUserAvatar: async (userId, avatarUrl) => {
+        let user = await User.findById(userId);
+        user.avatar = avatarUrl;
+        await user.save();
+    },
+    getUserById: async (userId) => {
+        return await User.findById(userId);
+    },
+    updateUserInfo: async (userId, newInfo) => {
+        const updatedUser = await User.findByIdAndUpdate(userId, newInfo, { returnDocument: 'after' });
+        return updatedUser;
+    },
+    verifyUser: async (token) => {
+        const user = await User.findOne({ verificationToken: token });
+        if (!user) return false;
+        user.isVerified = true;
+        user.verificationToken = null;
+        await user.save();
+        return true;
     }
 }

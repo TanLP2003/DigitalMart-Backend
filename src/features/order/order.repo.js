@@ -20,10 +20,11 @@ module.exports = {
         return orders;
     },
     createOrder: async (userId, orderInfo) => {
-        const newOrder = await (await Order.create({ userId: userId, ...orderInfo })).populate({
+        const newOrder = await (await Order.create({ user: userId, ...orderInfo })).populate({
             path: 'items',
             populate: { path: 'product' }
         });
+        await newOrder.populate('user');
         return newOrder;
     }
 }

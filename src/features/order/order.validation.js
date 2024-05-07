@@ -8,7 +8,12 @@ const createOrderReqValidate = (req) => {
             quantity: Joi.number().greater(0).required(),
             subTotalPrice: Joi.number().greater(0).required()
         }).required()),
-        totalPrice: Joi.number().required().greater(0)
+        totalPrice: Joi.number().required().greater(0),
+        cardName: Joi.string().required(),
+        cardNumber: Joi.string().required(),
+        cvv: Joi.string().required(),
+        // expiration: Joi.string().pattern(new RegExp('^(0[1-9]|1[0-2])\/(19|20)\d{2}$')).required(),
+        expiration: Joi.string().required()
     })
     return createOrderSchema.validate(req);
 }
