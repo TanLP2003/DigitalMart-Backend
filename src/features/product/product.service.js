@@ -1,7 +1,6 @@
 const { BadRequest, NotFound } = require('../../utils/createError');
 const productRepo = require('./product.repo');
 const categoryRepo = require('../category/category.repo');
-const UploadService = require('../upload/upload.service');
 const { createProcessImageJob } = require('../../backgroundtask/imageJobQueue');
 
 module.exports = {
@@ -12,8 +11,6 @@ module.exports = {
     createProduct: async (product, images) => {
         const category = await categoryRepo.getById(product.category);
         if (!category) throw BadRequest(`Category is not existed!`);
-        // const urls = await UploadService.uploadMultiFile(images);
-        // product.images = urls;
         const newProduct = await productRepo.createProduct(product);
         await createProcessImageJob(newProduct.id, images, []);
         return newProduct;

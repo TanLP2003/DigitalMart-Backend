@@ -1,21 +1,21 @@
 const { StatusCodes } = require('http-status-codes');
-const FavorService = require('./favorite.service');
+const FavoriteService = require('./favorite.service');
 
 module.exports = {
     getFavoriteOfUser: async (req, res, next) => {
         try {
             const userId = req.headers['x-userId'];
-            res.status(StatusCodes.OK).json(await FavorService.getFavoriteOfUser(userId));
+            res.status(StatusCodes.OK).json(await FavoriteService.getFavoriteOfUser(userId));
         }
-        catch(err) {
+        catch (err) {
             next(err);
         }
     },
     addProductToList: async (req, res, next) => {
         try {
-            const {productId} = req.params;
             const userId = req.headers['x-userId'];
-            res.status(StatusCodes.OK).json(await FavorService.addProductToList(userId, productId));
+            await FavoriteService.addProductToFavorite(userId, req.body);
+            res.status(StatusCodes.OK).json(await FavoriteService.getFavoriteOfUser(userId));
         }
         catch (err) {
             next(err);
@@ -25,7 +25,8 @@ module.exports = {
         try {
             const { productId } = req.params;
             const userId = req.headers['x-userId'];
-            res.status(StatusCodes.OK).json(await FavoriteService.removeFromFavorite(userId, productId));
+            await FavoriteService.removeProductFromFavorite(userId, productId);
+            res.status(StatusCodes.OK).json(await FavoriteService.getFavoriteOfUser(userId));
         }
         catch (err) {
             next(err)

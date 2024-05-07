@@ -1,4 +1,3 @@
-const { redis } = require('../../configs/config');
 const { redisClient } = require('../../configs/init.db');
 
 module.exports = {

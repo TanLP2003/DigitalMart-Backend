@@ -1,9 +1,6 @@
-const BasketRepo = require('./basket.repo');
-const ProductRepo = require('../product/product.repo');
 const OrderService = require('../order/order.repo');
 const { BadRequest } = require('../../utils/createError');
 const redisRepo = require('../redis/redis.repo');
-const { redis } = require('../../configs/config');
 
 module.exports = {
     // getBasket: async (userId) => {
