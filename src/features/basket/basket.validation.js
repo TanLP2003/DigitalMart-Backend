@@ -23,7 +23,11 @@ const checkoutBasketReqValidate = (req) => {
     const checkoutBasketSchema = Joi.object({
         selectedItems: Joi.array().min(1).items(
             Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
-        )
+        ),
+        cardName: Joi.string().required(),
+        cardNumber: Joi.string().required(),
+        cvv: Joi.string().required(),
+        expiration: Joi.string().required()
     });
     return checkoutBasketSchema.validate(req);
 }

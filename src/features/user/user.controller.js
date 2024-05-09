@@ -44,7 +44,9 @@ module.exports = {
         try {
             const userId = req.headers['x-userId'];
             const file = req.file;
+            console.log(file);
             const url = await UserService.changeAvatar(userId, file);
+            console.log(url);
             res.status(StatusCodes.OK).json({ url: url });
         }
         catch (err) {

@@ -11,7 +11,7 @@ module.exports = {
         return orders;
     },
     getOrderByUserId: async (userId) => {
-        const orders = await Order.find({ userId: userId })
+        const orders = await Order.find({ user: userId })
             .populate({
                 path: 'items',
                 populate: { path: 'product' }

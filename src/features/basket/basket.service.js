@@ -83,6 +83,13 @@ module.exports = {
         }
         productInventory.stock = stock - incrementBy;
         quantityInBasket += incrementBy;
+        if(quantityInBasket < 0) {
+            throw BadRequest("Quantity must be greater than zero");
+        }
+        if(quantityInBasket == 0){
+            await redisRepo.hdel(`basket:${userId}`, `product:${productId}`);
+            return;
+        }
         await redisRepo.jsonSet(`inventory:${productId}`, '.', productInventory);
         await redisRepo.hset(`basket:${userId}`, `product:${productId}`, JSON.stringify({ product: product, quantity: quantityInBasket }));
         // return await getBasket(userId);
@@ -97,7 +104,7 @@ module.exports = {
         }
         return { userId: userId, items: productList };
     },
-    checkoutSelectedItems: async (userId, selectedItem) => {
+    checkoutSelectedItems: async (userId, selectedItem, paymentInfo) => {
         let totalPrice = 0;
         let orderItemList = await Promise.all(selectedItem.map(async item => {
             const productInBasketString = await redisRepo.hget(`basket:${userId}`, `product:${item}`);
@@ -114,7 +121,11 @@ module.exports = {
         console.log(orderItemList);
         const orderInfo = {
             items: orderItemList,
-            totalPrice: totalPrice
+            totalPrice: totalPrice,
+            cardName: paymentInfo.cardName,
+            cardNumber: paymentInfo.cardNumber,
+            cvv: paymentInfo.cvv,
+            expiration: paymentInfo.expiration
         }
         const newOrder = await OrderService.createOrder(userId, orderInfo);
         return newOrder;

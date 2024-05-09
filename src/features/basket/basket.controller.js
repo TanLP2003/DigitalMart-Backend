@@ -37,7 +37,12 @@ module.exports = {
     checkoutBasket: async (req, res, next) => {
         try {
             const userId = req.headers['x-userId'];
-            const newOrder = await BasketService.checkoutSelectedItems(userId, req.body.selectedItems);
+            const newOrder = await BasketService.checkoutSelectedItems(userId, req.body.selectedItems, {
+                cardName: req.body.cardName, 
+                cardNumber: req.body.cardNumber,
+                cvv: req.body.cvv,
+                expiration: req.body.expiration
+            });
             res.status(StatusCodes.OK).json(newOrder);
         }
         catch (err) {
