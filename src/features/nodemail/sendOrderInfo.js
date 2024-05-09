@@ -198,4 +198,6 @@ const sendOrderInfo = async (emailAddress, order) => {
     )
 }
 
-module.exports = sendOrderInfo;
+module.exports = {
+    sendOrderInfo
+}

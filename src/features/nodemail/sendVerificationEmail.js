@@ -70,4 +70,6 @@ const sendVerificationRequest = async (emailAddress, token) => {
         })
 }
 
-module.exports = sendVerificationRequest;
+module.exports = {
+    sendVerificationRequest
+}

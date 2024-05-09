@@ -2,17 +2,27 @@ const { BadRequest, NotFound } = require('../../utils/createError');
 const productRepo = require('./product.repo');
 const categoryRepo = require('../category/category.repo');
 const { createProcessImageJob } = require('../../backgroundtask/imageJobQueue');
+const InventoryService = require('../inventory/inventory.service');
 
 module.exports = {
+    getAll: async (options) => {
+        return await productRepo.getAll(options);
+    },
     getById: async (id) => {
         const product = await productRepo.getProductById(id);
         return product;
     },
-    createProduct: async (product, images) => {
+    createProduct: async (product, inventory, images) => {
         const category = await categoryRepo.getById(product.category);
         if (!category) throw BadRequest(`Category is not existed!`);
         const newProduct = await productRepo.createProduct(product);
         await createProcessImageJob(newProduct.id, images, []);
+        await InventoryService.createInventory({
+            productId: newProduct.id,
+            productName: newProduct.name,
+            threshold: inventory.threshold,
+            stock: inventory.stock
+        })
         return newProduct;
     },
     deleteProduct: async (id) => {

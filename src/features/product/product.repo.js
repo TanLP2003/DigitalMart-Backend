@@ -1,6 +1,12 @@
 const Product = require('./product.model');
 const { redisClient } = require('../../configs/init.db')
 
+const getAll = async (options) => {
+    const { pageNumber, pageSize } = options;
+    const result = await Product.paginate({}, { page: pageNumber, limit: pageSize });
+    return result;
+}
+
 const createProduct = async (product) => {
     // console.log("repo", product);
     const newProduct = await Product.create(product);
@@ -47,6 +53,7 @@ const updateProductImage = async (id, newImages, deletedImages) => {
     await product.save();
 }
 module.exports = productRepo = {
+    getAll,
     getProductById,
     getByCategory,
     createProduct,

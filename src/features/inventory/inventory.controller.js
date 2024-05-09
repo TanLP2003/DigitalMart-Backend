@@ -21,7 +21,7 @@ module.exports = {
             next(err);
         }
     },
-    getInventory: async (req, res, next) => {
+    getInventoryOfProduct: async (req, res, next) => {
         try {
             const { productId } = req.params;
             const result = await InventoryService.getInventory(productId);

@@ -1,16 +1,38 @@
 const productService = require('./product.service');
-
+const PAGE_SIZE = 20;
 module.exports = {
     getById: async (req, res, next) => {
         const product = await productService.getById(req.params.id);
         res.status(200).json(product);
     },
+    getAllProduct: async (req, res, next) => {
+        const pageNumber = req.query.page || 1;
+        const result = await productService.getAll({ pageNumber: pageNumber, pageSize: PAGE_SIZE });
+        res.status(200).json({
+            products: result.docs,
+            page: result.page,
+            totalPages: result.totalPages,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage
+        });
+    },
     addProduct: async (req, res, next) => {
         try {
-            // console.log(req.body);
-            // console.log(req.files);
-            const newProduct = await productService.createProduct(req.body, req.files);
-            res.status(201).json(newProduct);
+            const productReqDto = req.body;
+            const newProduct = {
+                name: productReqDto.name, 
+                description: productReqDto.description,
+                price: productReqDto.price,
+                brand: productReqDto.brand,
+                category: productReqDto.category,
+                metadata: productReqDto.metadata
+            };
+            const newProductInventory = {
+                threshold: productReqDto.threshold,
+                stock: productReqDto.stock
+            }
+            const result = await productService.createProduct(newProduct, newProductInventory, req.files);
+            res.status(201).json(result);
         }
         catch (err) {
             next(err)

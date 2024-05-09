@@ -9,6 +9,8 @@ const addProductValidate = (req) => {
         brand: Joi.string(),
         category: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
         metadata: Joi.object().default({}),
+        threshold: Joi.number().min(1).required(),
+        stock: Joi.number().min(1).required()
     })
     return addProductSchema.validate(req);
 }

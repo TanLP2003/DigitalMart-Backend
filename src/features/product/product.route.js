@@ -8,7 +8,8 @@ const {
     deleteProduct,
     updateProduct,
     getByCategory,
-    getProductToCache
+    getProductToCache,
+    getAllProduct
 } = require('./product.controller');
 const { addProductValidate, updateProductValidate } = require('./product.validation');
 
@@ -18,5 +19,6 @@ productRouter.delete('/:id', Authentication(CONSTANT.ROLE.ADMIN), deleteProduct)
 productRouter.put('/:id', Authentication(CONSTANT.ROLE.ADMIN), uploadMulter.array('newImages'), Validation(updateProductValidate), updateProduct);
 productRouter.get('/category/:category', getByCategory);
 productRouter.get('/getToCache', getProductToCache)
+productRouter.get('/all', getAllProduct);
 
 module.exports = productRouter;

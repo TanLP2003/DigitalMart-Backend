@@ -1,4 +1,6 @@
 const express = require('express');
+const {createServer} = require('http');
+const {Server} = require('socket.io');
 const cors = require('cors');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -10,11 +12,12 @@ const basketRouter = require('./features/basket/basket.route');
 const favoriteRouter = require('./features/favorite/favorite.route');
 const orderRouter = require('./features/order/order.route');
 const { connectDatabases } = require('./configs/init.db');
-const { sendGmail } = require('./features/nodemail/mail.service');
 const buyerRoute = require('./features/buyer/buyer.route');
 const inventoryRoute = require('./features/inventory/inventory.route');
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
 
 app.use(helmet());
 app.use(cors());
@@ -30,20 +33,20 @@ app.use('/api/favorite', favoriteRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/buyer', buyerRoute);
 app.use('/api/inventory', inventoryRoute);
-// app.use('/api/test', (req, res, next) => {
-//     res.status(200).json("OK");
-//     console.log("hello-world")
-// })
 app.use(globalExceptionHandler)
+
+io.on('connection', (socket) => {
+    console.log("connected");
+})
 
 connectDatabases()
     .then(() => {
-        app.listen(8000, () => {
+        server.listen(8000, () => {
             console.log("Listening on port 8000");
         });
-        // sendGmail();
     })
     .catch((err) => {
         console.log(err);
         process.exit();
     })
+    
