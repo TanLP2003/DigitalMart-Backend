@@ -3,7 +3,7 @@ const {createClient} = require('redis');
 const config = require('./config');
 
 const redisClient = createClient({
-    password: config.redis.password,
+    // password: config.redis.password,
     socket: {
         host: config.redis.host,
         port: config.redis.port
