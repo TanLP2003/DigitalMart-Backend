@@ -1,3 +1,4 @@
+const { BadRequest } = require("../../utils/createError");
 const { uploadToCloudinary } = require("./cloudinary.service");
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
         return urls.filter(url => url !== null);
     },
     uploadSingleFile: async (file) => {
+        if (!file) throw BadRequest("File is empty");
         const url = await uploadToCloudinary(file.buffer);
         return url;
     }

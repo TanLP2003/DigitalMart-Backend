@@ -14,7 +14,7 @@ const signupRequestValidate = (signupReq) => {
         email: Joi.string().email().required(),
         username: Joi.string().required(),
         password: Joi.string().required(),
-        gender: Joi.string().required(),
+        // gender: Joi.string().required(),
         phonenumber: Joi.string().required().pattern(new RegExp('^0\\d{9,10}$'))
     })
     return signupReqSchema.validate(signupReq, { abortEarly: true });
@@ -39,7 +39,8 @@ const updateUserInfoReqValidate = (req) => {
 const changePasswordReqValidate = (req) => {
     const changePasswordReqSchema = Joi.object({
         oldPassword: Joi.string().required(),
-        newPassword: Joi.string().required()
+        newPassword: Joi.string().required(),
+        retypePassword: Joi.string().required()
     });
     return changePasswordReqSchema.validate(req);
 }

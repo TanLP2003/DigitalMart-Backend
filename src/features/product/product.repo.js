@@ -52,6 +52,12 @@ const updateProductImage = async (id, newImages, deletedImages) => {
     });
     await product.save();
 }
+
+const getTenProductByCategory = async (category) => {
+    const result = await Product.find({ category: category }).sort({ createdAt: -1 }).limit(10);
+    return result;
+}
+
 module.exports = productRepo = {
     getAll,
     getProductById,
@@ -60,5 +66,6 @@ module.exports = productRepo = {
     updateProduct,
     deleteProduct,
     getProductToCache,
-    updateProductImage
+    updateProductImage,
+    getTenProductByCategory
 }

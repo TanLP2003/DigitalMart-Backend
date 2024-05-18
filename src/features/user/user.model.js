@@ -43,7 +43,7 @@ const userSchema = new Schema({
             values: ["MALE", "FEMALE", "CUSTOM"],
             message: props => `${props.value} is not supported!`
         },
-        required: true
+        // required: true
     },
     role: {
         type: String,

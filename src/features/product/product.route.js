@@ -3,22 +3,15 @@ const uploadMulter = require('../../configs/multer');
 const Authentication = require('../../middlewares/checkAuth');
 const Validation = require('../../middlewares/validation');
 const CONSTANT = require('../../utils/constant');
-const {
-    addProduct,
-    deleteProduct,
-    updateProduct,
-    getByCategory,
-    getProductToCache,
-    getAllProduct
-} = require('./product.controller');
+const ProductController = require('./product.controller');
 const { addProductValidate, updateProductValidate } = require('./product.validation');
 
 // productRouter.get('/:id', getById);
-productRouter.post('/', Authentication(CONSTANT.ROLE.ADMIN), uploadMulter.array('images'), Validation(addProductValidate), addProduct);
-productRouter.delete('/:id', Authentication(CONSTANT.ROLE.ADMIN), deleteProduct);
-productRouter.put('/:id', Authentication(CONSTANT.ROLE.ADMIN), uploadMulter.array('newImages'), Validation(updateProductValidate), updateProduct);
-productRouter.get('/category/:category', getByCategory);
-productRouter.get('/getToCache', getProductToCache)
-productRouter.get('/all', getAllProduct);
+productRouter.post('/', uploadMulter.array('images'), Validation(addProductValidate), ProductController.addProduct);
+productRouter.delete('/:id', Authentication(CONSTANT.ROLE.ADMIN), ProductController.deleteProduct);
+productRouter.put('/:id', Authentication(CONSTANT.ROLE.ADMIN), uploadMulter.array('newImages'), Validation(updateProductValidate), ProductController.updateProduct);
+productRouter.get('/category/:category', ProductController.getByCategory);
+productRouter.get('/all', ProductController.getAllProduct);
+productRouter.get('/ten-product-per-category', ProductController.getTenProductPerCategory);
 
 module.exports = productRouter;

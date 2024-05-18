@@ -1,3 +1,4 @@
+const { StatusCodes } = require('http-status-codes');
 const productService = require('./product.service');
 const PAGE_SIZE = 20;
 module.exports = {
@@ -20,7 +21,7 @@ module.exports = {
         try {
             const productReqDto = req.body;
             const newProduct = {
-                name: productReqDto.name, 
+                name: productReqDto.name,
                 description: productReqDto.description,
                 price: productReqDto.price,
                 brand: productReqDto.brand,
@@ -71,5 +72,15 @@ module.exports = {
     getProductToCache: async (req, res, next) => {
         await productService.getProductToCache();
         res.status(200).json({});
+    },
+    getTenProductPerCategory: async (req, res, next) => {
+        try {
+            console.log("asdfsdaf");
+            const result = await productService.getTenProductPerCategory();
+            res.status(StatusCodes.OK).json(result);
+        }
+        catch (err) {
+            next(err);
+        }
     }
 }

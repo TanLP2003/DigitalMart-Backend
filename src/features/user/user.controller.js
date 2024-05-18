@@ -4,7 +4,9 @@ module.exports = {
     registerUser: async (req, res, next) => {
         try {
             await UserService.registerUser(req.body);
-            res.status(StatusCodes.CREATED).json("Confirmation Email has been send to you email!");
+            res.status(StatusCodes.CREATED).json({
+                notification: "Confirmation Email has been send to you email!"
+            });
         }
         catch (err) {
             next(err);
@@ -72,9 +74,11 @@ module.exports = {
     changePassword: async (req, res, next) => {
         try {
             const userId = req.headers['x-userId'];
-            const { oldPassword, newPassword } = req.body;
-            await UserService.changePassword(userId, oldPassword, newPassword);
-            res.status(StatusCodes.ACCEPTED).json();
+            const { oldPassword, newPassword, retypePassword } = req.body;
+            await UserService.changePassword(userId, oldPassword, newPassword, retypePassword);
+            res.status(StatusCodes.ACCEPTED).json({
+                notification: "Change password successfully"
+            });
         }
         catch (err) {
             next(err);

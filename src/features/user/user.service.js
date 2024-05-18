@@ -70,10 +70,11 @@ module.exports = {
         const updatedUser = await UserRepo.updateUserInfo(userId, newInfo);
         return updatedUser;
     },
-    changePassword: async (userId, oldPassword, newPassword) => {
+    changePassword: async (userId, oldPassword, newPassword, retypePassword) => {
         const user = await UserRepo.getUserById(userId);
         if (!user) throw NotFound(`User does not exist`);
         if (!user.isVerified) throw BadRequest("Account is not verified!");
+        if (newPassword !== retypePassword) throw BadRequest("Retype Password miss matched!");
         const result = await comparePassword(oldPassword, user.password);
         if (!result) throw BadRequest(`Wrong Password`);
         await UserRepo.updateUserInfo(userId, { password: await hashPassword(newPassword) });

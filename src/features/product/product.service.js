@@ -3,6 +3,7 @@ const productRepo = require('./product.repo');
 const categoryRepo = require('../category/category.repo');
 const { createProcessImageJob } = require('../../backgroundtask/imageJobQueue');
 const InventoryService = require('../inventory/inventory.service');
+const CategoryService = require('../category/category.service');
 
 module.exports = {
     getAll: async (options) => {
@@ -45,4 +46,17 @@ module.exports = {
     getProductToCache: async () => {
         await productRepo.getProductToCache();
     },
+    getTenProductPerCategory: async () => {
+        console.log("asdfasdf");
+        const categoryList = await CategoryService.getAll();
+        let result = await Promise.all(categoryList.map(async category => {
+            const tenProduct = await productRepo.getTenProductByCategory(category.id);
+            return {
+                category: category.name,
+                tenProduct: tenProduct
+            };
+        }));
+        console.log(result);
+        return result;
+    }
 }

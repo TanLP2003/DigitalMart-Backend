@@ -3,13 +3,14 @@ const categoryService = require('./category.service');
 module.exports = {
     getAll: async (req, res) => {
         res.status(200).json(await categoryService.getAll());
-    } ,
+    },
     addCategory: async (req, res, next) => {
         try {
-            const newCategory = await categoryService.addCategory(req.body);
+            const image = req.file;
+            const newCategory = await categoryService.addCategory(req.body, image);
             res.status(200).json(newCategory);
         }
-        catch(err) {
+        catch (err) {
             next(err)
         }
     },
@@ -18,7 +19,7 @@ module.exports = {
             await categoryService.deleteCategory(req.params.name);
             res.status(200).json();
         }
-        catch(err) {
+        catch (err) {
             next(err);
         }
     },
@@ -26,7 +27,7 @@ module.exports = {
         try {
             res.status(200).json(await categoryService.renameCategory(req.params.id, req.body.name));
         }
-        catch(err){
+        catch (err) {
             next(err);
         }
     }

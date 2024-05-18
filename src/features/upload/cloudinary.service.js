@@ -13,7 +13,7 @@ module.exports = {
         // console.log(typeof buffer);
         const uploadResult = await new Promise((resolve) => {
             cloudinary.uploader.upload_stream({
-                folder: 'hello-world',
+                folder: 'digital-mart',
                 use_filename: true
             }, (error, uploadResult) => {
                 return resolve(uploadResult);
