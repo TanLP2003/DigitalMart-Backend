@@ -88,6 +88,7 @@ module.exports = {
     forgotPassword: async (email) => {
         const existedUser = await UserRepo.getUserByEmail(email);
         if (!existedUser) throw NotFound(`User with ${email} is not existed`);
+        if (existedUser.role === "ADMIN") throw BadRequest(`You don't have permission to do this!`);
         const newRandomPassword = generateRandomPassword();
         await UserRepo.updateUserInfo(existedUser.id, { password: await hashPassword(newRandomPassword) });
         await sendNewPassword(email, newRandomPassword);

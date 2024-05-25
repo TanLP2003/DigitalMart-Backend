@@ -14,6 +14,6 @@ userRouter.put('/changeAvatar', Authentication(CONSTANT.ROLE.CUSTOMER), uploadMu
 userRouter.put('/updateInfo', Authentication(CONSTANT.ROLE.CUSTOMER), Validation(updateUserInfoReqValidate), UserController.updateUserInfo);
 userRouter.put('/changePassword', Authentication(CONSTANT.ROLE.ALL), Validation(changePasswordReqValidate), UserController.changePassword);
 userRouter.get('/verify/:token', UserController.verify)
-userRouter.put('/forgotPassword', Authentication(CONSTANT.ROLE.CUSTOMER), Validation(forgotPasswordReqValidate), UserController.forgotPassword);
+userRouter.put('/forgotPassword', Validation(forgotPasswordReqValidate), UserController.forgotPassword);
 
 module.exports = userRouter;
