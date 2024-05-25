@@ -1,9 +1,10 @@
 const UserRepo = require('./user.repo');
 const TokenService = require('../token/token.service');
-const { comparePassword, hashPassword, generateToken } = require('../../utils/auth');
+const { comparePassword, hashPassword, generateToken, generateRandomPassword } = require('../../utils/auth');
 const { NotFound, BadRequest } = require('../../utils/createError');
 const { sendVerificationRequest } = require('../nodemail/sendVerificationEmail');
 const UploadService = require('../upload/upload.service');
+const { sendNewPassword } = require('../nodemail/sendNewPassword');
 
 module.exports = {
     registerUser: async (user) => {
@@ -33,7 +34,8 @@ module.exports = {
                 email: existedUser.email,
                 phonenumber: existedUser.phonenumber,
                 avatar: existedUser.avatar,
-                gender: existedUser.gender
+                gender: existedUser.gender,
+                role: existedUser.role
             },
             accessToken: await TokenService.generateAccessToken(existedUser.id, existedUser.role),
             refreshToken: await TokenService.generateRefreshToken(existedUser.id, existedUser.role)
@@ -82,5 +84,12 @@ module.exports = {
     verifyUser: async (token) => {
         const result = await UserRepo.verifyUser(token);
         if (!result) throw BadRequest("Verification failed!");
+    },
+    forgotPassword: async (email) => {
+        const existedUser = await UserRepo.getUserByEmail(email);
+        if (!existedUser) throw NotFound(`User with ${email} is not existed`);
+        const newRandomPassword = generateRandomPassword();
+        await UserRepo.updateUserInfo(existedUser.id, { password: await hashPassword(newRandomPassword) });
+        await sendNewPassword(email, newRandomPassword);
     }
 }

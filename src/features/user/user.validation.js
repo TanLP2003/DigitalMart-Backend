@@ -45,10 +45,18 @@ const changePasswordReqValidate = (req) => {
     return changePasswordReqSchema.validate(req);
 }
 
+const forgotPasswordReqValidate = (req) => {
+    const forgotPasswordReqSchema = Joi.object({
+        email: Joi.string().email().required()
+    })
+    return forgotPasswordReqSchema.validate(req);
+}
+
 module.exports = {
     loginRequestValidate,
     signupRequestValidate,
     refreshTokenReqValidate,
     updateUserInfoReqValidate,
-    changePasswordReqValidate
+    changePasswordReqValidate,
+    forgotPasswordReqValidate
 }

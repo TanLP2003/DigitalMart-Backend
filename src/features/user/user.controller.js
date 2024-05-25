@@ -15,8 +15,8 @@ module.exports = {
     login: async (req, res, next) => {
         try {
             const { email, password } = req.body;
-            const token = await UserService.login(email, password);
-            res.status(StatusCodes.OK).json(token);
+            const result = await UserService.login(email, password);
+            res.status(StatusCodes.OK).json(result);
         }
         catch (err) {
             next(err);
@@ -90,6 +90,18 @@ module.exports = {
             console.log(token);
             await UserService.verifyUser(token);
             res.status(StatusCodes.OK).json();
+        }
+        catch (err) {
+            next(err);
+        }
+    },
+    forgotPassword: async (req, res, next) => {
+        try {
+            const { email } = req.body;
+            await UserService.forgotPassword(email);
+            res.status(StatusCodes.ACCEPTED).json({
+                notification: "New Password has been sent to your email!"
+            })
         }
         catch (err) {
             next(err);
