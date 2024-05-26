@@ -22,7 +22,8 @@ const updateProductValidate = (req) => {
             description: Joi.string().max(300),
             price: Joi.number(),
             brand: Joi.string(),
-            stock: Joi.number().min(0),
+            stock: Joi.number().min(1),
+            threshold: Joi.number().min(1),
             category: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
             metadata: Joi.object().default({})
         }),

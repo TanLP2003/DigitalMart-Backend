@@ -25,6 +25,12 @@ const config = {
     },
     jobQueue: {
         queueName: 'imageProcessQueue'
+    },
+    payment: {
+        vnp_Url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+        vnp_TmnCode: '922PVKMW',
+        vnp_HashSecret: '1E1WMFKY9G8PGM2F8V6WSUU0AD7A471W',
+        vnp_ReturnUrl: 'http://127.0.0.1/api/payment/vnpay_return'
     }
 }
 

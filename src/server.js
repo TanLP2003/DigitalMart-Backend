@@ -1,6 +1,6 @@
 const express = require('express');
-const {createServer} = require('http');
-const {Server} = require('socket.io');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 const cors = require('cors');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -14,10 +14,15 @@ const orderRouter = require('./features/order/order.route');
 const { connectDatabases } = require('./configs/init.db');
 const buyerRoute = require('./features/buyer/buyer.route');
 const inventoryRoute = require('./features/inventory/inventory.route');
+// const paymentRouter = require('./features/payment/payment');
+// const path = require('path');
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
 app.use(helmet());
 app.use(cors());
@@ -33,6 +38,7 @@ app.use('/api/favorite', favoriteRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/buyer', buyerRoute);
 app.use('/api/inventory', inventoryRoute);
+// app.use('/api/payment', paymentRouter);
 app.use(globalExceptionHandler)
 
 io.on('connection', (socket) => {
@@ -49,4 +55,3 @@ connectDatabases()
         console.log(err);
         process.exit();
     })
-    

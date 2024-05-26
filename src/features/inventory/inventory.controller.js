@@ -11,16 +11,16 @@ module.exports = {
             next(err);
         }
     },
-    updateInventory: async (req, res, next) => {
-        try {
-            const { productId, field, value } = req.body
-            await InventoryService.updateInventory(productId, field, value);
-            res.status(StatusCodes.OK).json({});
-        }
-        catch (err) {
-            next(err);
-        }
-    },
+    // updateInventory: async (req, res, next) => {
+    //     try {
+    //         const { productId, field, value } = req.body
+    //         await InventoryService.updateInventory(productId, field, value);
+    //         res.status(StatusCodes.OK).json({});
+    //     }
+    //     catch (err) {
+    //         next(err);
+    //     }
+    // },
     getInventoryOfProduct: async (req, res, next) => {
         try {
             const { productId } = req.params;
