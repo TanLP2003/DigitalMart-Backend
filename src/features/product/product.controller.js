@@ -50,6 +50,7 @@ module.exports = {
     },
     updateProduct: async (req, res, next) => {
         const { id } = req.params;
+        console.log(req.body.data);
         try {
             const updatedProduct = await productService.updateProduct(id, req.body.data, req.files, req.body.deletedImages);
             res.status(200).json(updatedProduct);
@@ -77,6 +78,17 @@ module.exports = {
         try {
             console.log("asdfsdaf");
             const result = await productService.getTenProductPerCategory();
+            res.status(StatusCodes.OK).json(result);
+        }
+        catch (err) {
+            next(err);
+        }
+    },
+    searchProduct: async (req, res, next) => {
+        try {
+            const { name } = req.params;
+            // console.log(name);
+            const result = await productService.searchProduct(name);
             res.status(StatusCodes.OK).json(result);
         }
         catch (err) {

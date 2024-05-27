@@ -1,25 +1,16 @@
-const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const { Schema, Entity, Repository } = require('redis-om');
+const { redisClient } = require('../../configs/init.db');
+class Inventory extends Entity { }
 
-const inventorySchema = new Schema({
-    productId: {
-        type: String,
-        required: true
-    },
-    productName: {
-        type: String,
-        required: true 
-    },
-    threshold: {
-        type: Number,
-        required: true
-    },
-    stock: {
-        type: Number,
-        required: true
-    }
-})
+const inventorySchema = new Schema(Inventory, {
+    productId: { type: 'text' },
+    productName: { type: 'text' },
+    stock: { type: 'number' },
+    threshold: { type: 'number' }
+});
 
-const Inventory = mongoose.model('inventories', inventorySchema);
-
-module.exports = Inventory;
+const InventoryRepo = new Repository(inventorySchema, redisClient);
+await InventoryRepo.createIndex()
+module.exports = {
+    InventoryRepo
+}

@@ -18,8 +18,16 @@ const getProductById = async (id) => {
     return product;
 }
 
-const updateProduct = async (id, updateBody, deletedImages) => {
-    const updatedProduct = await Product.findByIdAndUpdate(id, updateBody);
+const updateProduct = async (id, updateBody, newImages, deletedImages) => {
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateBody, { new: true }).populate('category', 'name -_id');
+    if (newImages.length > 0) updatedProduct.images.push(...newImages);
+    if (deletedImages.length > 0) deletedImages.forEach(deletedImage => {
+        const index = updatedProduct.images.indexOf(deletedImage);
+        if (index !== -1) {
+            updatedProduct.images.splice(index, 1);
+        }
+    });
+    await updatedProduct.save();
     return updatedProduct;
 }
 

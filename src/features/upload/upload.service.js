@@ -5,7 +5,7 @@ module.exports = {
     uploadMultiFile: async (files) => {
         const urls = await Promise.all(files.map(async (file) => {
             try {
-                const url = await uploadToCloudinary(Buffer.from(file.buffer.data));
+                const url = await uploadToCloudinary(file.buffer);
                 return url;
             } catch (err) {
                 console.log("upload error: ", err);

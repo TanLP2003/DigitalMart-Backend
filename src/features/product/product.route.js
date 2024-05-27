@@ -13,5 +13,6 @@ productRouter.put('/:id', Authentication(CONSTANT.ROLE.ADMIN), uploadMulter.arra
 productRouter.get('/category/:category', ProductController.getByCategory);
 productRouter.get('/all', ProductController.getAllProduct);
 productRouter.get('/ten-product-per-category', ProductController.getTenProductPerCategory);
+productRouter.get('/search/:name', ProductController.searchProduct);
 
 module.exports = productRouter;
