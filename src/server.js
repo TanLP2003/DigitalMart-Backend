@@ -14,7 +14,7 @@ const orderRouter = require('./features/order/order.route');
 const { connectDatabases } = require('./configs/init.db');
 const buyerRoute = require('./features/buyer/buyer.route');
 const inventoryRoute = require('./features/inventory/inventory.route');
-// const paymentRouter = require('./features/payment/payment');
+const paymentRouter = require('./features/payment/payment.route');
 // const path = require('path');
 
 const app = express();
@@ -38,7 +38,7 @@ app.use('/api/favorite', favoriteRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/buyer', buyerRoute);
 app.use('/api/inventory', inventoryRoute);
-// app.use('/api/payment', paymentRouter);
+app.use('/api/payment', paymentRouter);
 app.use(globalExceptionHandler)
 
 io.on('connection', (socket) => {
