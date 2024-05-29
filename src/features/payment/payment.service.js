@@ -17,25 +17,25 @@ function sortObject(obj) {
     }
     return sorted;
 }
-function generateRandomNumberString(length) {
-    let result = '';
-    const characters = '0123456789';
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
-}
+// function generateRandomNumberString(length) {
+//     let result = '';
+//     const characters = '0123456789';
+//     for (let i = 0; i < length; i++) {
+//         result += characters.charAt(Math.floor(Math.random() * characters.length));
+//     }
+//     return result;
+// }
 
 module.exports = {
-    createPaymentUrl: () => {
+    createPaymentUrl: (orderId, amount) => {
         let ipAddr = '127.0.0.1';
         let tmnCode = '922PVKMW'
         let secretKey = '1E1WMFKY9G8PGM2F8V6WSUU0AD7A471W'
         let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
         let vnpReturnUrl = 'http://localhost:8000/api/payment/return-pay'
-        let vnpTxnRef = generateRandomNumberString(10)
-        let vnpOrderInfo = 'Thanh toan don hang dich vu'
-        let vnpAmount = 10000 * 100
+        let vnpTxnRef = orderId
+        let vnpOrderInfo = `Thanh toán đơn hàng mã ${orderId}`
+        let vnpAmount = amount * 100
         let bankCode = ''
         let vnpLocale = 'vn'
         let vnpIpAddr = ipAddr
@@ -71,5 +71,11 @@ module.exports = {
         vnp_Params['vnp_SecureHash'] = signed;
         vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
         return vnpUrl;
+    },
+    getOrderIdAndTransactionStatus: (params) => {
+        return {
+            orderId: params['vnp_TxnRef'],
+            status: params['vnp_TransactionStatus']
+        }
     }
 }

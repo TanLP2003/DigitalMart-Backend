@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { removeVersionKey } = require('../../configs/db.plugin');
 const { Schema } = mongoose;
 
 const categorySchema = new Schema({
@@ -13,7 +14,7 @@ const categorySchema = new Schema({
     }
 })
 
-
+categorySchema.plugin(removeVersionKey);
 const Category = mongoose.model("categories", categorySchema);
 
 module.exports = { categorySchema, Category };

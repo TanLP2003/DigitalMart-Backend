@@ -12,6 +12,8 @@ const updateBasketReqValidate = (req) => {
             brand: Joi.string().required(),
             category: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
             metadata: Joi.object().default({}),
+            createdAt: Joi.date(),
+            isPublished: Joi.boolean().valid(true).required()
         }),
         incrementBy: Joi.number().greater(0).required()
     })
@@ -24,10 +26,11 @@ const checkoutBasketReqValidate = (req) => {
         selectedItems: Joi.array().min(1).items(
             Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
         ),
-        cardName: Joi.string().required(),
-        cardNumber: Joi.string().required(),
-        cvv: Joi.string().required(),
-        expiration: Joi.string().required()
+        // cardName: Joi.string().required(),
+        // cardNumber: Joi.string().required(),
+        // cvv: Joi.string().required(),
+        // expiration: Joi.string().required()
+        address: Joi.string().required()
     });
     return checkoutBasketSchema.validate(req);
 }

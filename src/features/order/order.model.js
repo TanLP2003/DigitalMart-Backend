@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { BadRequest } = require('../../utils/createError');
+const { removeVersionKey } = require('../../configs/db.plugin');
 const { Schema } = mongoose;
 
 const orderItemSchema = new Schema({
@@ -40,28 +41,9 @@ const orderSchema = new Schema({
         type: Number,
         required: true
     },
-    cardName: {
+    address: {
         type: String,
         required: true
-    },
-    cardNumber: {
-        type: String,
-        required: true
-    },
-    cvv: {
-        type: String,
-        required: true
-    },
-    expiration: {
-        type: String,
-        required: true,
-        validate: {
-            validator: function (v) {
-                var pattern = /^(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
-                return pattern.test(v);
-            },
-            message: props => `${props.value} is not a valid expired date`
-        }
     }
 }, {
     timestamps: {
@@ -75,7 +57,7 @@ orderSchema.pre('save', async function (next) {
     if (this.totalPrice !== totalPrice) next(BadRequest('TotalPrice is not valid'));
     next();
 })
-
+orderSchema.plugin(removeVersionKey);
 const Order = mongoose.model('orders', orderSchema);
 
 module.exports = Order;

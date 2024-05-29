@@ -1,3 +1,4 @@
+const { NotFound } = require('../../utils/createError');
 const { sendOrderInfo } = require('../nodemail/sendOrderInfo');
 const OrderRepo = require('./order.repo');
 
@@ -14,5 +15,14 @@ module.exports = {
     },
     getAllOrder: async () => {
         return await OrderRepo.getAllOrder();
+    },
+    getOrderById: async (orderId) => {
+        const order = await OrderRepo.getOrderById(orderId);
+        if (!order) throw NotFound(`Order with id ${orderId} is not existed!`);
+        return order;
+    },
+    deleteOrderById: async (orderId) => {
+        const result = await OrderRepo.deleteOrder(orderId);
+        if (!result) throw BadRequest(`Order ${orderId} delete failed`);
     }
 }
