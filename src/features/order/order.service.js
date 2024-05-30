@@ -24,5 +24,8 @@ module.exports = {
     deleteOrderById: async (orderId) => {
         const result = await OrderRepo.deleteOrder(orderId);
         if (!result) throw BadRequest(`Order ${orderId} delete failed`);
+    },
+    getNumberOfOrders: async () => {
+        return await OrderRepo.getNumberOfOrders();
     }
 }

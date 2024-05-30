@@ -29,5 +29,14 @@ module.exports = {
     //     catch (err) {
     //         next(err);
     //     }
-    // }
+    // },
+    getNumberOfOrder: async (req, res, next) => {
+        try {
+            const result = await OrderService.getNumberOfOrders();
+            res.status(StatusCodes.OK).json(result);
+        }
+        catch (err) {
+            next(err)
+        }
+    }
 }

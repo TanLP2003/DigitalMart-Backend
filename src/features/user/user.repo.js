@@ -27,5 +27,9 @@ module.exports = {
         user.verificationToken = null;
         await user.save();
         return true;
+    },
+    getNumberOfUser: async () => {
+        const result = await User.countDocuments();
+        return result;
     }
 }
