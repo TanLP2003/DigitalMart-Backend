@@ -1,5 +1,5 @@
 const CONSTANT = {
-    DEFAULT_AVATAR: 'https://res.cloudinary.com/dumhujhqd/image/upload/v1715091840/hello-world/default_avatar_cg2kax.jpg',
+    DEFAULT_AVATAR: 'https://res.cloudinary.com/dumhujhqd/image/upload/v1717085787/digital-mart/default_avatar_mt17jo.jpg',
     ROLE: {
         ADMIN: ["ADMIN"],
         CUSTOMER: ["CUSTOMER"],

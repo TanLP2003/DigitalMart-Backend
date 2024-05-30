@@ -24,14 +24,14 @@ module.exports = {
         }
         productInventory.stock = stock - incrementBy;
         quantityInBasket += incrementBy;
-        if(quantityInBasket < 0) {
+        if (quantityInBasket < 0) {
             throw BadRequest("Quantity must be greater than zero");
         }
-        if(quantityInBasket == 0){
+        await redisRepo.jsonSet(`inventory:${productId}`, '.', productInventory);
+        if (quantityInBasket == 0) {
             await redisRepo.hdel(`basket:${userId}`, `product:${productId}`);
             return;
         }
-        await redisRepo.jsonSet(`inventory:${productId}`, '.', productInventory);
         await redisRepo.hset(`basket:${userId}`, `product:${productId}`, JSON.stringify({ product: product, quantity: quantityInBasket }));
         // return await getBasket(userId);
     },

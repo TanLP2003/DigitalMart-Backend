@@ -19,6 +19,7 @@ module.exports = {
                 return resolve(uploadResult);
             }).end(buffer)
         })
+        console.log(uploadResult);
         return uploadResult.url;
     }
 }

@@ -15,7 +15,7 @@ const updateBasketReqValidate = (req) => {
             createdAt: Joi.date(),
             isPublished: Joi.boolean().valid(true).required()
         }),
-        incrementBy: Joi.number().greater(0).required()
+        incrementBy: Joi.number().required()
     })
     return updateBasketSchema.validate(req);
 }
