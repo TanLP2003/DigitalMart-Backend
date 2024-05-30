@@ -92,5 +92,9 @@ module.exports = {
         const newRandomPassword = generateRandomPassword();
         await UserRepo.updateUserInfo(existedUser.id, { password: await hashPassword(newRandomPassword) });
         await sendNewPassword(email, newRandomPassword);
+    },
+    getNumberOfCustomer: async () => {
+        const result = await UserRepo.getNumberOfUser();
+        return result - 1;
     }
 }

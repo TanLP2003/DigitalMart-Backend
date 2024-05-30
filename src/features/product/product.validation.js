@@ -10,7 +10,8 @@ const addProductValidate = (req) => {
         category: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
         metadata: Joi.object().default({}),
         threshold: Joi.number().min(1).required(),
-        stock: Joi.number().min(1).required()
+        stock: Joi.number().min(1).required(),
+        isPublished: Joi.boolean().default(false)
     })
     return addProductSchema.validate(req);
 }
@@ -25,7 +26,8 @@ const updateProductValidate = (req) => {
             stock: Joi.number().min(1),
             threshold: Joi.number().min(1),
             category: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
-            metadata: Joi.object().default({})
+            metadata: Joi.object().default({}),
+            isPublished: Joi.boolean()
         }),
         deletedImages: Joi.array().default([])
     })

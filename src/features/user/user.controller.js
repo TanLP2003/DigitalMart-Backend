@@ -106,5 +106,14 @@ module.exports = {
         catch (err) {
             next(err);
         }
+    },
+    getNumberOfCustomer: async (req, res, next) => {
+        try {
+            const result = await UserService.getNumberOfCustomer();
+            res.status(StatusCodes.OK).json(result)
+        }
+        catch (err) {
+            next(err)
+        }
     }
 }

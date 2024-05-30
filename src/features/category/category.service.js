@@ -17,5 +17,8 @@ module.exports = {
     },
     renameCategory: async (id, newName) => {
         return await categoryRepo.renameCategory(id, newName);
+    },
+    getNumberOfCategories: async () => {
+        return await categoryRepo.getNumberOfCategories();
     }
 }

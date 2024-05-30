@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const { removeVersionKey } = require('../../configs/db.plugin');
+const { Schema } = mongoose;
 
 const tokenSchema = new Schema({
     refreshToken: {
@@ -12,5 +13,6 @@ const tokenSchema = new Schema({
     }
 })
 
+tokenSchema.plugin(removeVersionKey)
 const Token = mongoose.model('tokens', tokenSchema);
 module.exports = Token;

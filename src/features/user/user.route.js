@@ -15,5 +15,6 @@ userRouter.put('/updateInfo', Authentication(CONSTANT.ROLE.CUSTOMER), Validation
 userRouter.put('/changePassword', Authentication(CONSTANT.ROLE.ALL), Validation(changePasswordReqValidate), UserController.changePassword);
 userRouter.get('/verify/:token', UserController.verify)
 userRouter.put('/forgotPassword', Validation(forgotPasswordReqValidate), UserController.forgotPassword);
+userRouter.get('/number-of-customers', UserController.getNumberOfCustomer)
 
 module.exports = userRouter;

@@ -47,6 +47,11 @@ const paginate = (schema) => {
     };
 }
 
+const removeVersionKey = (schema) => {
+    schema.set('toJSON', { versionKey: false });
+    schema.set('toObject', { versionKey: false });
+}
+
 module.exports = {
-    paginate
+    paginate, removeVersionKey
 }

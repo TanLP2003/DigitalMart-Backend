@@ -63,10 +63,11 @@ module.exports = {
         const orderInfo = {
             items: orderItemList,
             totalPrice: totalPrice,
-            cardName: paymentInfo.cardName,
-            cardNumber: paymentInfo.cardNumber,
-            cvv: paymentInfo.cvv,
-            expiration: paymentInfo.expiration
+            // cardName: paymentInfo.cardName,
+            // cardNumber: paymentInfo.cardNumber,
+            // cvv: paymentInfo.cvv,
+            // expiration: paymentInfo.expiration
+            address: paymentInfo.address
         }
         const newOrder = await OrderService.createOrder(userId, orderInfo);
         return newOrder;

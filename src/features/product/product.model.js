@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
+const { removeVersionKey } = require('../../configs/db.plugin');
+const { boolean } = require('joi');
 const { Schema } = mongoose;
 
 const productSchema = new Schema({
@@ -27,6 +29,11 @@ const productSchema = new Schema({
     metadata: {
         type: Object,
         default: {}
+    },
+    isPublished: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 }, {
     timestamps: {
@@ -44,5 +51,6 @@ productSchema.pre('save', function (next) {
 })
 
 productSchema.plugin(mongoosePaginate);
+productSchema.plugin(removeVersionKey);
 
 module.exports = Product = mongoose.model("products", productSchema);

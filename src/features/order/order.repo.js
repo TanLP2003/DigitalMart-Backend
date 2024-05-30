@@ -26,5 +26,20 @@ module.exports = {
         });
         await newOrder.populate('user');
         return newOrder;
+    },
+    getOrderById: async (orderId) => {
+        const order = await Order.findById(orderId).populate({
+            path: 'items',
+            populate: { path: 'product' }
+        }).populate('user');
+        return order;
+    },
+    deleteOrder: async (orderId) => {
+        const result = await Order.findByIdAndDelete(orderId);
+        return !result ? false : true;
+    },
+    getNumberOfOrders: async () => {
+        const result = await Order.countDocuments()
+        return result;
     }
 }

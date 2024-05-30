@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const BasketService = require('./basket.service');
+const PaymentService = require('../payment/payment.service')
 
 module.exports = {
     getBasket: async (req, res, next) => {
@@ -38,12 +39,10 @@ module.exports = {
         try {
             const userId = req.headers['x-userId'];
             const newOrder = await BasketService.checkoutSelectedItems(userId, req.body.selectedItems, {
-                cardName: req.body.cardName, 
-                cardNumber: req.body.cardNumber,
-                cvv: req.body.cvv,
-                expiration: req.body.expiration
+                address: req.body.address
             });
-            res.status(StatusCodes.OK).json(newOrder);
+            const vnpUrl = PaymentService.createPaymentUrl(newOrder.id, newOrder.totalPrice);
+            res.redirect(vnpUrl);
         }
         catch (err) {
             next(err);

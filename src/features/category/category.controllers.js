@@ -1,3 +1,4 @@
+const { StatusCodes } = require('http-status-codes');
 const categoryService = require('./category.service');
 
 module.exports = {
@@ -29,6 +30,14 @@ module.exports = {
         }
         catch (err) {
             next(err);
+        }
+    },
+    getNumberOfCategories: async (req, res, next) => {
+        try {
+            res.status(StatusCodes.OK).json(await categoryService.getNumberOfCategories());
+        }
+        catch (err) {
+            next(err)
         }
     }
 }
