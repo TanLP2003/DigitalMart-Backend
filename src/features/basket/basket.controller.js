@@ -41,8 +41,9 @@ module.exports = {
             const newOrder = await BasketService.checkoutSelectedItems(userId, req.body.selectedItems, {
                 address: req.body.address
             });
+            console.log(newOrder.totalPrice);
             const vnpUrl = PaymentService.createPaymentUrl(newOrder.id, newOrder.totalPrice);
-            res.redirect(vnpUrl);
+            res.status(StatusCodes.OK).json(vnpUrl);
         }
         catch (err) {
             next(err);

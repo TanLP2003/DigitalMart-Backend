@@ -38,5 +38,14 @@ module.exports = {
         catch (err) {
             next(err)
         }
+    },
+    getOrderbyId: async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            res.status(StatusCodes.OK).json(await OrderService.getOrderById(id));
+        }
+        catch (err) {
+            next(err)
+        }
     }
 }

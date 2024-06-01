@@ -16,10 +16,10 @@ module.exports = {
             const { orderId, status } = PaymentService.getOrderIdAndTransactionStatus(params);
             if (status === '00') {
                 const newOrder = await OrderService.getOrderById(orderId);
-                res.status(StatusCodes.OK).json(newOrder);
+                res.redirect(`http://localhost:5173/customer-bill-info/${newOrder.id}`)
             } else {
                 await OrderService.deleteOrderById(orderId);
-                res.status(StatusCodes.OK).json();
+                res.status(StatusCodes.OK).json('/');
             }
         }
         catch (err) {

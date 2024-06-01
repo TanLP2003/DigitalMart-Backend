@@ -9,5 +9,6 @@ orderRouter.get('/', Authentication(CONSTANT.ROLE.CUSTOMER), OrderController.get
 orderRouter.get('/all', Authentication(CONSTANT.ROLE.ADMIN), OrderController.getAllOrder);
 // orderRouter.post('/', Authentication(CONSTANT.ROLE.CUSTOMER), Validation(createOrderReqValidate), OrderController.createOrder);
 orderRouter.get('/number-of-orders', OrderController.getNumberOfOrder)
+orderRouter.get('/:id', OrderController.getOrderbyId);
 
 module.exports = orderRouter;

@@ -12,7 +12,7 @@ const Authentication = (permission) => (req, res, next) => {
             req.headers['x-userId'] = userId;
         }
         catch(err) {
-            next(err);
+            res.status(StatusCodes.UNAUTHORIZED).json();
         }
         next();
     } else {
