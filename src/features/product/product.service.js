@@ -7,6 +7,12 @@ const CategoryService = require('../category/category.service');
 const uploadService = require('../upload/upload.service');
 const { ProductRedisRepo } = require('../../configs/init.db');
 
+const stopWords = ["a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if", "in", "into", "is", "it", "no", "not", "of", "on", "or", "such", "that", "the", "their", "then", "there", "these", "they", "this", "to", "was", "will", "with"];
+
+const removeStopWords = (query) => {
+    return query.split(' ').filter(word => !stopWords.includes(word.toLowerCase())).join(' ');
+};
+
 module.exports = {
     getAll: async (options) => {
         return await productRepo.getAll(options);
@@ -83,9 +89,12 @@ module.exports = {
     },
     searchProduct: async (name) => {
         console.log(name);
+        const filteredName = removeStopWords(name);
+        // const query = `@productName:"${filteredName}"`;
         const products = await ProductRedisRepo.search().where('productName')
-            .match(name, { fuzzyMatching: true })
+            .matches(filteredName, { fuzzyMatching: true })
             .return.all();
+        // const products = await ProductRedisRepo.search().raw(query).return.all()
         return products;
     }
 }

@@ -15,6 +15,8 @@ const redisClient = createClient({
 const productSchema = new Schema('product', {
     productId: { type: 'text' },
     productName: { type: 'text' }
+}, {
+    stopWords: []
 });
 
 const ProductRedisRepo = new Repository(productSchema, redisClient);

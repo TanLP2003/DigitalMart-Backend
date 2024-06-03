@@ -14,7 +14,8 @@ const createProduct = async (product) => {
 }
 
 const getProductById = async (id) => {
-    const product = await Product.findById(id).populate('category', 'name -_id');
+    // const product = await Product.findById(id).populate('category', 'name -_id');
+    const product = await Product.findById(id);
     return product;
 }
 

@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const productService = require('./product.service');
-const PAGE_SIZE = 20;
+const InventoryService = require('../inventory/inventory.service');
+const PAGE_SIZE = 12;
 module.exports = {
     getById: async (req, res, next) => {
         const product = await productService.getById(req.params.id);
@@ -90,6 +91,20 @@ module.exports = {
             // console.log(name);
             const result = await productService.searchProduct(name);
             res.status(StatusCodes.OK).json(result);
+        }
+        catch (err) {
+            next(err);
+        }
+    },
+    getProductWithInventory: async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const product = await productService.getById(id);
+            const inventory = await InventoryService.getInventory(id);
+            res.status(StatusCodes.OK).json({
+                product: product,
+                inventory: inventory
+            })
         }
         catch (err) {
             next(err);
