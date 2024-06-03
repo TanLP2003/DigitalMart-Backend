@@ -15,8 +15,10 @@ module.exports = {
         let result = await categoryRepo.deleteCategory(name);
         if (!result) throw BadRequest("Bad Request");
     },
-    renameCategory: async (id, newName) => {
-        return await categoryRepo.renameCategory(id, newName);
+    updateCategory: async (id, newName, file) => {
+        let url;
+        if (file) url = await uploadService.uploadSingleFile(file)
+        return await categoryRepo.updateCategory(id, newName, url);
     },
     getNumberOfCategories: async () => {
         return await categoryRepo.getNumberOfCategories();

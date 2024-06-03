@@ -24,9 +24,10 @@ module.exports = {
             next(err);
         }
     },
-    renameCategory: async (req, res, next) => {
+    updateCategory: async (req, res, next) => {
         try {
-            res.status(200).json(await categoryService.renameCategory(req.params.id, req.body.name));
+            const image = req.file;
+            res.status(200).json(await categoryService.updateCategory(req.params.id, req.body.name, image));
         }
         catch (err) {
             next(err);

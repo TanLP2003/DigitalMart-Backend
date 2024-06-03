@@ -15,8 +15,11 @@ module.exports = {
         const deletedCategory = await Category.findOneAndDelete({ name: name });
         return !deletedCategory ? false : true;
     },
-    renameCategory: async (id, newName) => {
-        return await Category.findByIdAndUpdate(id, { name: newName }, { new: true });
+    updateCategory: async (id, newName, url) => {
+        let updateBody = {};
+        if (newName) updateBody['name'] = newName;
+        if (url) updateBody['image'] = url;
+        return await Category.findByIdAndUpdate(id, updateBody, { new: true });
     },
     getNumberOfCategories: async () => {
         return await Category.countDocuments();

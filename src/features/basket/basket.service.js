@@ -1,4 +1,5 @@
-const OrderService = require('../order/order.repo');
+const OrderService = require('../order/order.service');
+const InventoryService = require('../inventory/inventory.service')
 const { BadRequest } = require('../../utils/createError');
 const redisRepo = require('../redis/redis.repo');
 

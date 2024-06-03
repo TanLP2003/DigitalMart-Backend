@@ -7,4 +7,13 @@ const CategoryReqValidate = (req) => {
     return commonSchema.validate(req);
 }
 
-module.exports = CategoryReqValidate;
+const UpdateCategoryReqValidate = (req) => {
+    const updateCategorySchema = Joi.object({
+        name: Joi.string()
+    })
+    return updateCategorySchema.validate(req);
+}
+
+module.exports = {
+    CategoryReqValidate, UpdateCategoryReqValidate
+};

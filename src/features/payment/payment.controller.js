@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const PaymentService = require('./payment.service');
 const OrderService = require('../order/order.service');
+const { sendOrderInfo } = require('../nodemail/sendOrderInfo');
 module.exports = {
     createPayReq: async (req, res, next) => {
         const vnpUrl = PaymentService.createPaymentUrl();
@@ -16,6 +17,7 @@ module.exports = {
             const { orderId, status } = PaymentService.getOrderIdAndTransactionStatus(params);
             if (status === '00') {
                 const newOrder = await OrderService.getOrderById(orderId);
+                await sendOrderInfo(newOrder.user.email, newOrder);
                 res.redirect(`http://localhost:5173/customer-bill-info/${newOrder.id}`)
             } else {
                 await OrderService.deleteOrderById(orderId);
