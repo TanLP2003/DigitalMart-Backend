@@ -49,15 +49,20 @@ module.exports = {
     checkoutSelectedItems: async (userId, selectedItem, paymentInfo) => {
         let totalPrice = 0;
         let orderItemList = await Promise.all(selectedItem.map(async item => {
-            const productInBasketString = await redisRepo.hget(`basket:${userId}`, `product:${item}`);
-            const { product, quantity } = JSON.parse(productInBasketString);
+            const productInBasketString = await redisRepo.hget(`basket:${userId}`, `product:${item.productId}`);
+            let { product, quantity } = JSON.parse(productInBasketString);
             const orderItem = {
                 product: product,
-                quantity: quantity,
-                subTotalPrice: product.price * quantity
+                quantity: item.quantity,
+                subTotalPrice: product.price * item.quantity
             }
-            totalPrice += product.price * quantity;
-            await redisRepo.hdel(`basket:${userId}`, `product:${item}`);
+            quantity -= item.quantity;
+            if (quantity <= 0) {
+                await redisRepo.hdel(`basket:${userId}`, `product:${item.productId}`);
+            } else {
+                await redisRepo.hset(`basket:${userId}`, `product:${item.productId}`, JSON.stringify({ product: product, quantity: quantity }));
+            }
+            totalPrice += product.price * item.quantity;
             return orderItem;
         }));
         console.log(orderItemList);

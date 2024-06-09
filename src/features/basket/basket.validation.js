@@ -6,7 +6,7 @@ const updateBasketReqValidate = (req) => {
         product: Joi.object().keys({
             _id: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
             name: Joi.string().required(),
-            description: Joi.string().max(300).required(),
+            description: Joi.string().required(),
             images: Joi.array().required(),
             price: Joi.number().required(),
             brand: Joi.string().required(),
@@ -24,7 +24,10 @@ const checkoutBasketReqValidate = (req) => {
     console.log("validating.....");
     const checkoutBasketSchema = Joi.object({
         selectedItems: Joi.array().min(1).items(
-            Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+            Joi.object({
+                productId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
+                quantity: Joi.number().integer().min(1).required()
+            })
         ),
         // cardName: Joi.string().required(),
         // cardNumber: Joi.string().required(),
