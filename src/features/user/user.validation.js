@@ -31,7 +31,7 @@ const updateUserInfoReqValidate = (req) => {
     const updateUserInfoReqSchema = Joi.object({
         username: Joi.string(),
         phonenumber: Joi.string().pattern(new RegExp('^0\\d{9,10}$')),
-        gender: Joi.string()
+        gender: Joi.string().valid('MALE', 'FEMALE', 'CUSTOM')
     })
     return updateUserInfoReqSchema.validate(req);
 }

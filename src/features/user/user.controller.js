@@ -64,6 +64,7 @@ module.exports = {
                 username: updatedUser.username,
                 email: updatedUser.email,
                 phonenumber: updatedUser.phonenumber,
+                gender: updatedUser.gender,
                 role: updatedUser.role
             });
         }
