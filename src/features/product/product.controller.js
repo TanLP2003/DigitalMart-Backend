@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const productService = require('./product.service');
 const InventoryService = require('../inventory/inventory.service');
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 9999999;
 module.exports = {
     getById: async (req, res, next) => {
         const product = await productService.getById(req.params.id);
@@ -11,11 +11,11 @@ module.exports = {
         const pageNumber = req.query.page || 1;
         const result = await productService.getAll({ pageNumber: pageNumber, pageSize: PAGE_SIZE });
         res.status(200).json({
-            products: result.docs,
-            page: result.page,
-            totalPages: result.totalPages,
-            hasPrevPage: result.hasPrevPage,
-            hasNextPage: result.hasNextPage
+            products: result,
+            page: 1,
+            totalPages: 1,
+            hasPrevPage: false,
+            hasNextPage: false
         });
     },
     addProduct: async (req, res, next) => {
@@ -62,13 +62,13 @@ module.exports = {
     },
     getByCategory: async (req, res, next) => {
         const pageNumber = req.query.page || 1;
-        const result = await productService.getByCategory(req.params.category, { pageNumber: pageNumber, pageSize: 9999 });
+        const result = await productService.getByCategory(req.params.category, { pageNumber: pageNumber, pageSize: PAGE_SIZE });
         res.status(200).json({
-            products: result.docs,
-            page: result.page,
-            totalPages: result.totalPages,
-            hasPrevPage: result.hasPrevPage,
-            hasNextPage: result.hasNextPage
+            products: result,
+            page: 1,
+            totalPages: 1,
+            hasPrevPage: false,
+            hasNextPage: false
         });
     },
     getProductToCache: async (req, res, next) => {
@@ -105,6 +105,15 @@ module.exports = {
                 product: product,
                 inventory: inventory
             })
+        }
+        catch (err) {
+            next(err);
+        }
+    },
+    getAllProductAdmin: async (req, res, next) => {
+        try {
+            const result = await productService.getAllProductAdmin();
+            res.status(StatusCodes.OK).json(result)
         }
         catch (err) {
             next(err);

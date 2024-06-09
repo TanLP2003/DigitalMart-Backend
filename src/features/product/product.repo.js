@@ -3,7 +3,7 @@ const { redisClient } = require('../../configs/init.db')
 
 const getAll = async (options) => {
     const { pageNumber, pageSize } = options;
-    const result = await Product.paginate({}, { page: pageNumber, limit: pageSize });
+    const result = await Product.find({ isPublished: true });
     return result;
 }
 
@@ -39,7 +39,7 @@ const deleteProduct = async (id) => {
 
 const getByCategory = async (category, options) => {
     const { pageNumber, pageSize } = options;
-    const result = await Product.paginate({ category: category }, { page: pageNumber, limit: pageSize });
+    const result = await Product.find({ isPublished: true });
     return result;
 }
 
@@ -63,8 +63,12 @@ const updateProductImage = async (id, newImages, deletedImages) => {
 }
 
 const getTenProductByCategory = async (category) => {
-    const result = await Product.find({ category: category }).sort({ createdAt: -1 }).limit(10);
+    const result = await Product.find({ category: category, isPublished: true }).sort({ createdAt: -1 }).limit(10);
     return result;
+}
+
+const getAllByAdmin = async () => {
+    return result = await Product.find({});
 }
 
 module.exports = productRepo = {
@@ -76,5 +80,6 @@ module.exports = productRepo = {
     deleteProduct,
     getProductToCache,
     updateProductImage,
-    getTenProductByCategory
+    getTenProductByCategory,
+    getAllByAdmin
 }

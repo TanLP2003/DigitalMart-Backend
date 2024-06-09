@@ -96,5 +96,8 @@ module.exports = {
             .return.all();
         // const products = await ProductRedisRepo.search().raw(query).return.all()
         return products;
+    },
+    getAllProductAdmin: async () => {
+        return await productRepo.getAllByAdmin();
     }
 }
