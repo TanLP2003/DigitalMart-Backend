@@ -90,7 +90,7 @@ module.exports = {
             const { token } = req.params;
             console.log(token);
             await UserService.verifyUser(token);
-            res.status(StatusCodes.OK).json();
+            res.status(StatusCodes.OK).json("Verify successfully. Please go back to login page");
         }
         catch (err) {
             next(err);
